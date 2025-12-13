@@ -23,6 +23,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/runners"
+	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/serviceaccounts"
 	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/settings"
 )
 
@@ -30,6 +31,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		settings.SetupApplicationSettings,
 		runners.SetupRunner,
+		serviceaccounts.SetupServiceAccount,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -44,6 +46,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		settings.SetupApplicationSettingsGated,
 		runners.SetupRunnerGated,
+		serviceaccounts.SetupServiceAccountGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
