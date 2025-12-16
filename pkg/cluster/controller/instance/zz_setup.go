@@ -24,12 +24,14 @@ import (
 
 	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/runners"
 	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/settings"
+	"github.com/crossplane-contrib/provider-gitlab/pkg/cluster/controller/instance/variables"
 )
 
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		settings.SetupApplicationSettings,
 		runners.SetupRunner,
+		variables.SetupVariable,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err
@@ -44,6 +46,7 @@ func SetupGated(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		settings.SetupApplicationSettingsGated,
 		runners.SetupRunnerGated,
+		variables.SetupVariableGated,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

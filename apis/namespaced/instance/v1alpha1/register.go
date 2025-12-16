@@ -58,7 +58,16 @@ var (
 	RunnerGroupVersionKind = SchemeGroupVersion.WithKind(RunnerKind)
 )
 
+// Variable type metadata
+var (
+	VariableKind             = reflect.TypeOf(Variable{}).Name()
+	VariableGroupKind        = schema.GroupKind{Group: Group, Kind: VariableKind}.String()
+	VariableKindAPIVersion   = VariableKind + "." + SchemeGroupVersion.String()
+	VariableGroupVersionKind = SchemeGroupVersion.WithKind(VariableKind)
+)
+
 func init() {
 	SchemeBuilder.Register(&ApplicationSettings{}, &ApplicationSettingsList{})
 	SchemeBuilder.Register(&Runner{}, &RunnerList{})
+	SchemeBuilder.Register(&Variable{}, &VariableList{})
 }
