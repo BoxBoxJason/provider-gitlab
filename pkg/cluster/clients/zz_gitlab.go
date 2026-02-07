@@ -164,6 +164,7 @@ func StringToPtr(s string) *string {
 }
 
 // IsComparableEqualToComparablePtr compares a *T with T where T is comparable
+// Returns true if cp is nil or *cp is equal to c, otherwise returns false
 func IsComparableEqualToComparablePtr[T comparable](cp *T, c T) bool {
 	return cp == nil || cmp.Equal(*cp, c)
 }

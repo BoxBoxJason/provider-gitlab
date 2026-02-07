@@ -104,6 +104,9 @@ spec:
                     type: string
                   buildGitStrategy:
                     description: The Git strategy. Defaults to fetch.
+                    enum:
+                    - fetch
+                    - clone
                     type: string
                   buildTimeout:
                     description: The maximum amount of time, in seconds, that a job

@@ -494,124 +494,124 @@ func isProjectUpToDate(p *v1alpha1.ProjectParameters, g *gitlab.Project) bool { 
 	if p.Name != nil && !cmp.Equal(*p.Name, g.Name) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.AllowMergeOnSkippedPipeline, g.AllowMergeOnSkippedPipeline) {
+	if !clients.IsComparableEqualToComparablePtr(p.AllowMergeOnSkippedPipeline, g.AllowMergeOnSkippedPipeline) {
 		return false
 	}
-	if !clients.IsInt64EqualToInt64Ptr(p.ApprovalsBeforeMerge, g.ApprovalsBeforeMerge) { //nolint:staticcheck
+	if !clients.IsComparableEqualToComparablePtr(p.ApprovalsBeforeMerge, g.ApprovalsBeforeMerge) { //nolint:staticcheck
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.AutocloseReferencedIssues, g.AutocloseReferencedIssues) {
+	if !clients.IsComparableEqualToComparablePtr(p.AutocloseReferencedIssues, g.AutocloseReferencedIssues) {
 		return false
 	}
-	if !cmp.Equal(p.BuildCoverageRegex, clients.StringToPtr(g.BuildCoverageRegex)) {
+	if !clients.IsComparableEqualToComparablePtr(p.BuildCoverageRegex, g.BuildCoverageRegex) {
 		return false
 	}
-	if p.BuildsAccessLevel != nil && !cmp.Equal(string(*p.BuildsAccessLevel), string(g.BuildsAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.BuildsAccessLevel), string(g.BuildsAccessLevel)) {
 		return false
 	}
-	if p.CIConfigPath != nil && !cmp.Equal(*p.CIConfigPath, g.CIConfigPath) {
+	if !clients.IsComparableEqualToComparablePtr(p.CIConfigPath, g.CIConfigPath) {
 		return false
 	}
-	if !clients.IsInt64EqualToInt64Ptr(p.CIDefaultGitDepth, g.CIDefaultGitDepth) {
+	if !clients.IsComparableEqualToComparablePtr(p.CIDefaultGitDepth, g.CIDefaultGitDepth) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.CIForwardDeploymentEnabled, g.CIForwardDeploymentEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.CIForwardDeploymentEnabled, g.CIForwardDeploymentEnabled) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.ContainerRegistryEnabled, g.ContainerRegistryEnabled) { //nolint:staticcheck
+	if !clients.IsComparableEqualToComparablePtr(p.ContainerRegistryEnabled, g.ContainerRegistryEnabled) { //nolint:staticcheck
 		return false
 	}
-	if p.ContainerRegistryAccessLevel != nil && !cmp.Equal(string(*p.ContainerRegistryAccessLevel), string(g.ContainerRegistryAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.ContainerRegistryAccessLevel), string(g.ContainerRegistryAccessLevel)) {
 		return false
 	}
-	if !cmp.Equal(p.DefaultBranch, clients.StringToPtr(g.DefaultBranch)) {
+	if !clients.IsComparableEqualToComparablePtr(p.DefaultBranch, g.DefaultBranch) {
 		return false
 	}
-	if !cmp.Equal(p.Description, clients.StringToPtr(g.Description)) {
+	if !clients.IsComparableEqualToComparablePtr(p.Description, g.Description) {
 		return false
 	}
-	if p.ForkingAccessLevel != nil && !cmp.Equal(string(*p.ForkingAccessLevel), string(g.ForkingAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.ForkingAccessLevel), string(g.ForkingAccessLevel)) {
 		return false
 	}
-	if p.IssuesAccessLevel != nil && !cmp.Equal(string(*p.IssuesAccessLevel), string(g.IssuesAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.IssuesAccessLevel), string(g.IssuesAccessLevel)) {
 		return false
 	}
-	if !cmp.Equal(p.IssuesTemplate, clients.StringToPtr(g.IssuesTemplate)) {
+	if !clients.IsComparableEqualToComparablePtr(p.IssuesTemplate, g.IssuesTemplate) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.LFSEnabled, g.LFSEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.LFSEnabled, g.LFSEnabled) {
 		return false
 	}
-	if p.MergeMethod != nil && !cmp.Equal(string(*p.MergeMethod), string(g.MergeMethod)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.MergeMethod), string(g.MergeMethod)) {
 		return false
 	}
-	if p.MergeRequestsAccessLevel != nil && !cmp.Equal(string(*p.MergeRequestsAccessLevel), string(g.MergeRequestsAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.MergeRequestsAccessLevel), string(g.MergeRequestsAccessLevel)) {
 		return false
 	}
-	if !cmp.Equal(p.MergeRequestsTemplate, clients.StringToPtr(g.MergeRequestsTemplate)) {
+	if !clients.IsComparableEqualToComparablePtr(p.MergeRequestsTemplate, g.MergeRequestsTemplate) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.Mirror, g.Mirror) {
+	if !clients.IsComparableEqualToComparablePtr(p.Mirror, g.Mirror) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.MirrorOverwritesDivergedBranches, g.MirrorOverwritesDivergedBranches) {
+	if !clients.IsComparableEqualToComparablePtr(p.MirrorOverwritesDivergedBranches, g.MirrorOverwritesDivergedBranches) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.MirrorTriggerBuilds, g.MirrorTriggerBuilds) {
+	if !clients.IsComparableEqualToComparablePtr(p.MirrorTriggerBuilds, g.MirrorTriggerBuilds) {
 		return false
 	}
-	if !clients.IsInt64EqualToInt64Ptr(p.MirrorUserID, g.MirrorUserID) {
+	if !clients.IsComparableEqualToComparablePtr(p.MirrorUserID, g.MirrorUserID) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.OnlyAllowMergeIfAllDiscussionsAreResolved, g.OnlyAllowMergeIfAllDiscussionsAreResolved) {
+	if !clients.IsComparableEqualToComparablePtr(p.OnlyAllowMergeIfAllDiscussionsAreResolved, g.OnlyAllowMergeIfAllDiscussionsAreResolved) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.OnlyAllowMergeIfPipelineSucceeds, g.OnlyAllowMergeIfPipelineSucceeds) {
+	if !clients.IsComparableEqualToComparablePtr(p.OnlyAllowMergeIfPipelineSucceeds, g.OnlyAllowMergeIfPipelineSucceeds) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.OnlyMirrorProtectedBranches, g.OnlyMirrorProtectedBranches) {
+	if !clients.IsComparableEqualToComparablePtr(p.OnlyMirrorProtectedBranches, g.OnlyMirrorProtectedBranches) {
 		return false
 	}
-	if p.OperationsAccessLevel != nil && !cmp.Equal(string(*p.OperationsAccessLevel), string(g.OperationsAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.OperationsAccessLevel), string(g.OperationsAccessLevel)) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.PackagesEnabled, g.PackagesEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.PackagesEnabled, g.PackagesEnabled) {
 		return false
 	}
-	if p.PagesAccessLevel != nil && !cmp.Equal(string(*p.PagesAccessLevel), string(g.PagesAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.PagesAccessLevel), string(g.PagesAccessLevel)) {
 		return false
 	}
-	if !cmp.Equal(p.Path, clients.StringToPtr(g.Path)) {
+	if !clients.IsComparableEqualToComparablePtr(p.Path, g.Path) {
 		return false
 	}
 	// Use the resolved publicJobs value for comparison
 	//nolint:staticcheck // We intentionally use the deprecated field for backward compatibility
 	effectiveValue, _ := common.ResolvePublicJobsSetting(p.PublicBuilds, p.PublicJobs)
-	if !clients.IsBoolEqualToBoolPtr(effectiveValue, g.PublicJobs) {
+	if !clients.IsComparableEqualToComparablePtr(effectiveValue, g.PublicJobs) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.RemoveSourceBranchAfterMerge, g.RemoveSourceBranchAfterMerge) {
+	if !clients.IsComparableEqualToComparablePtr(p.RemoveSourceBranchAfterMerge, g.RemoveSourceBranchAfterMerge) {
 		return false
 	}
-	if p.RepositoryAccessLevel != nil && !cmp.Equal(string(*p.RepositoryAccessLevel), string(g.RepositoryAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.RepositoryAccessLevel), string(g.RepositoryAccessLevel)) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.RequestAccessEnabled, g.RequestAccessEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.RequestAccessEnabled, g.RequestAccessEnabled) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.ResolveOutdatedDiffDiscussions, g.ResolveOutdatedDiffDiscussions) {
+	if !clients.IsComparableEqualToComparablePtr(p.ResolveOutdatedDiffDiscussions, g.ResolveOutdatedDiffDiscussions) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.ServiceDeskEnabled, g.ServiceDeskEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.ServiceDeskEnabled, g.ServiceDeskEnabled) {
 		return false
 	}
-	if !clients.IsBoolEqualToBoolPtr(p.SharedRunnersEnabled, g.SharedRunnersEnabled) {
+	if !clients.IsComparableEqualToComparablePtr(p.SharedRunnersEnabled, g.SharedRunnersEnabled) {
 		return false
 	}
-	if p.SnippetsAccessLevel != nil && !cmp.Equal(string(*p.SnippetsAccessLevel), string(g.SnippetsAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.SnippetsAccessLevel), string(g.SnippetsAccessLevel)) {
 		return false
 	}
-	if !cmp.Equal(p.SuggestionCommitMessage, clients.StringToPtr(g.SuggestionCommitMessage)) {
+	if !clients.IsComparableEqualToComparablePtr(p.SuggestionCommitMessage, g.SuggestionCommitMessage) {
 		return false
 	}
 	if !cmp.Equal(p.TagList, g.TagList, cmpopts.EquateEmpty()) { //nolint:staticcheck
@@ -620,10 +620,13 @@ func isProjectUpToDate(p *v1alpha1.ProjectParameters, g *gitlab.Project) bool { 
 	if !cmp.Equal(p.Topics, g.Topics, cmpopts.EquateEmpty()) {
 		return false
 	}
-	if p.Visibility != nil && !cmp.Equal(string(*p.Visibility), string(g.Visibility)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.Visibility), string(g.Visibility)) {
 		return false
 	}
-	if p.WikiAccessLevel != nil && !cmp.Equal(string(*p.WikiAccessLevel), string(g.WikiAccessLevel)) {
+	if !clients.IsComparableEqualToComparablePtr((*string)(p.WikiAccessLevel), string(g.WikiAccessLevel)) {
+		return false
+	}
+	if !clients.IsComparableEqualToComparablePtr(p.BuildGitStrategy, g.BuildGitStrategy) {
 		return false
 	}
 	return true
