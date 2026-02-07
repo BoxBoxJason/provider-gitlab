@@ -1,7 +1,8 @@
-apiVersion: projects.gitlab.crossplane.io/v1alpha1
+apiVersion: projects.gitlab.m.crossplane.io/v1alpha1
 kind: Project
 metadata:
   name: example-project
+  namespace: default
 spec:
   forProvider:
     # If not set, metadata.name will be used instead.
@@ -9,9 +10,10 @@ spec:
     namespaceIdRef:
       name: example-group
     description: "example project description"
+    buildGitStrategy: "fetch"
   providerConfigRef:
     name: gitlab-provider
+    kind: ProviderConfig
   # a reference to a Kubernetes secret to which the controller will write the runnersToken
   writeConnectionSecretToRef:
     name: gitlab-project-example-project
-    namespace: crossplane-system

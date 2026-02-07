@@ -182,6 +182,7 @@ type ProjectParameters struct {
 	BuildCoverageRegex *string `json:"buildCoverageRegex,omitempty"`
 
 	// The Git strategy. Defaults to fetch.
+	// +kubebuilder:validation:Enum:=fetch;clone
 	// +optional
 	BuildGitStrategy *string `json:"buildGitStrategy,omitempty"`
 
