@@ -79,12 +79,12 @@ func main() {
 	// Generate ApplicationSettingsParameters
 	out.WriteString("// ApplicationSettingsParameters defines the desired state for ApplicationSettings\n")
 	out.WriteString("// This struct was generated from gitlab.UpdateSettingsOptions struct, with just a rework of the json tags.\n")
-	generateStruct(out, "ApplicationSettingsParameters", reflect.TypeOf(gitlab.UpdateSettingsOptions{}))
+	generateStruct(out, "ApplicationSettingsParameters", reflect.TypeOf(gitlab.UpdateSettingsOptions{}), true)
 
 	// Generate ApplicationSettingsObservation
 	out.WriteString("// ApplicationSettingsObservation defines the observed state for ApplicationSettings\n")
 	out.WriteString("// This struct was generated from gitlab.Settings struct, with just a rework of the json tags.\n")
-	generateStruct(out, "ApplicationSettingsObservation", reflect.TypeOf(gitlab.Settings{}))
+	generateStruct(out, "ApplicationSettingsObservation", reflect.TypeOf(gitlab.Settings{}), false)
 
 	if err := os.WriteFile("generated_settings_types.go", []byte(out.String()), 0644); err != nil {
 		log.Fatal(err)
@@ -92,7 +92,7 @@ func main() {
 	fmt.Println("Generated generated_settings_types.go")
 }
 
-func generateStruct(out *strings.Builder, name string, t reflect.Type) {
+func generateStruct(out *strings.Builder, name string, t reflect.Type, omitEmpty bool) {
 	fmt.Fprintf(out, "type %s struct {\n", name)
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
@@ -126,8 +126,13 @@ func generateStruct(out *strings.Builder, name string, t reflect.Type) {
 		// Apply common acronym replacements to match existing style
 		jsonTag = replaceAcronyms(jsonTag)
 
-		// Add omitempty
-		tag := fmt.Sprintf("`json:\"%s,omitempty\"`", jsonTag)
+		var tag string
+		if omitEmpty {
+			// Add omitempty
+			tag = fmt.Sprintf("`json:\"%s,omitempty\"`", jsonTag)
+		} else {
+			tag = fmt.Sprintf("`json:\"%s\"`", jsonTag)
+		}
 
 		fmt.Fprintf(out, "\t// +optional\n\t%s %s %s\n", fieldName, goType, tag)
 
