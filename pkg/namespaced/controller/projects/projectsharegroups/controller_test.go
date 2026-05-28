@@ -25,7 +25,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/test"
 	"github.com/google/go-cmp/cmp"
 	"github.com/pkg/errors"
-	gitlab "gitlab.com/gitlab-org/api/client-go"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 
 	"github.com/crossplane-contrib/provider-gitlab/apis/namespaced/projects/v1alpha1"
 	"github.com/crossplane-contrib/provider-gitlab/pkg/namespaced/clients/projects"

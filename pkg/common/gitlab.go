@@ -26,7 +26,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/v2/pkg/resource"
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/pkg/errors"
-	gitlab "gitlab.com/gitlab-org/api/client-go"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v2"
 	"golang.org/x/oauth2"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/utils/ptr"
