@@ -33,6 +33,7 @@ import (
 // GitLab API types and to check whether resources are up-to-date.
 
 func TestNewAppearanceClient(t *testing.T) {
+	t.Parallel()
 	defer func() {
 		if r := recover(); r != nil {
 			t.Fatalf("NewAppearanceClient panicked: %v", r)
@@ -46,6 +47,7 @@ func TestNewAppearanceClient(t *testing.T) {
 }
 
 func TestGenerateUpdateAppearanceOptions(t *testing.T) {
+	t.Parallel()
 	title := "t"
 	bg := "#fff"
 	enabled := true
@@ -74,6 +76,7 @@ func TestGenerateUpdateAppearanceOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateUpdateAppearanceOptions(tc.params)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Fatalf("GenerateUpdateAppearanceOptions(...): -want, +got:\n%s", diff)
@@ -83,6 +86,7 @@ func TestGenerateUpdateAppearanceOptions(t *testing.T) {
 }
 
 func TestGenerateAppearanceObservation(t *testing.T) {
+	t.Parallel()
 	title := "GitLab"
 	bg := "#000"
 	enabled := true
@@ -103,6 +107,7 @@ func TestGenerateAppearanceObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateAppearanceObservation(tc.observed)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Fatalf("GenerateAppearanceObservation(...): -want, +got:\n%s", diff)
@@ -112,6 +117,7 @@ func TestGenerateAppearanceObservation(t *testing.T) {
 }
 
 func TestIsAppearanceUpToDate(t *testing.T) {
+	t.Parallel()
 	// Use non-empty values so the "match" case exercises all field comparisons.
 	val := func(s string) *string { return &s }
 	boolVal := func(b bool) *bool { return &b }

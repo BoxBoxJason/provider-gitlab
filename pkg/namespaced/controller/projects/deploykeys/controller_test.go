@@ -114,6 +114,7 @@ func buildDeployKey(modifiers ...deployKeyModifier) *v1alpha1.DeployKey {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		dk     resource.Managed
 		result managed.ExternalObservation
@@ -254,6 +255,7 @@ func TestObserve(t *testing.T) {
 
 	for testName, testCase := range testCases {
 		t.Run(testName, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: testCase.kube, client: testCase.deployKeyService}
 			result, err := victim.Observe(context.Background(), testCase.args.cr)
 
@@ -274,6 +276,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		dk     resource.Managed
 		result managed.ExternalCreation
@@ -373,6 +376,7 @@ func TestCreate(t *testing.T) {
 
 	for testName, testCase := range testCases {
 		t.Run(testName, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: testCase.kube, client: testCase.deployKeyService}
 			result, err := victim.Create(context.Background(), testCase.args.cr)
 
@@ -393,6 +397,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		dk     resource.Managed
 		result managed.ExternalUpdate
@@ -486,6 +491,7 @@ func TestUpdate(t *testing.T) {
 
 	for testName, testCase := range testCases {
 		t.Run(testName, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: testCase.kube, client: testCase.deployKeyService}
 			result, err := victim.Update(context.Background(), testCase.args.cr)
 
@@ -506,6 +512,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		dk  resource.Managed
 		err error
@@ -564,6 +571,7 @@ func TestDelete(t *testing.T) {
 
 	for testName, testCase := range testCases {
 		t.Run(testName, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: testCase.kube, client: testCase.deployKeyService}
 			_, err := victim.Delete(context.Background(), testCase.args.cr)
 

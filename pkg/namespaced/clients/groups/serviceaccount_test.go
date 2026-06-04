@@ -34,6 +34,7 @@ const (
 )
 
 func TestGenerateServiceAccountObservation(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		user *gitlab.User
 	}
@@ -54,6 +55,7 @@ func TestGenerateServiceAccountObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateServiceAccountObservationFromUser(tc.args.user)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateServiceAccountObservation(): -want, +got:\n%s", diff)
@@ -63,6 +65,7 @@ func TestGenerateServiceAccountObservation(t *testing.T) {
 }
 
 func TestGenerateUpdateServiceAccountOptions(t *testing.T) {
+	t.Parallel()
 	params := v1alpha1.ServiceAccountParameters{
 		CommonServiceAccountParameters: commonv1alpha1.CommonServiceAccountParameters{
 			Name:     sPtr(testServiceAccountName),
@@ -83,6 +86,7 @@ func TestGenerateUpdateServiceAccountOptions(t *testing.T) {
 }
 
 func TestGenerateServiceAccountCreateOptions(t *testing.T) {
+	t.Parallel()
 	params := v1alpha1.ServiceAccountParameters{
 		CommonServiceAccountParameters: commonv1alpha1.CommonServiceAccountParameters{
 			Name:     sPtr(testServiceAccountName),
@@ -107,6 +111,7 @@ func TestGenerateServiceAccountCreateOptions(t *testing.T) {
 }
 
 func TestIsServiceAccountUpToDate(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		params *v1alpha1.ServiceAccountParameters
 		user   *gitlab.User
@@ -140,6 +145,7 @@ func TestIsServiceAccountUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsServiceAccountUpToDate(tc.args.params, tc.args.user)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("IsServiceAccountUpToDate(): -want, +got:\n%s", diff)
@@ -149,6 +155,7 @@ func TestIsServiceAccountUpToDate(t *testing.T) {
 }
 
 func TestNewServiceAccountClient(t *testing.T) {
+	t.Parallel()
 	defer func() {
 		if r := recover(); r != nil {
 			t.Fatalf("NewServiceAccountClient() panicked: %v", r)

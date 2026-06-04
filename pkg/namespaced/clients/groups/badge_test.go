@@ -26,6 +26,7 @@ import (
 )
 
 func TestGenerateAddEditOptionsAndObservation(t *testing.T) {
+	t.Parallel()
 	name := "n"
 	img := "img"
 	link := "link"
@@ -55,6 +56,7 @@ func TestGenerateAddEditOptionsAndObservation(t *testing.T) {
 }
 
 func TestIsBadgeUpToDate(t *testing.T) {
+	t.Parallel()
 	name := "test-badge"
 	imageURL := "https://example.com/badge.svg"
 	linkURL := "https://example.com"
@@ -155,6 +157,7 @@ func TestIsBadgeUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsBadgeUpToDate(tc.args.spec, tc.args.observed)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("IsBadgeUpToDate() mismatch (-want +got):\n%s", diff)

@@ -40,6 +40,7 @@ var (
 )
 
 func TestLateInitializeVariable(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		parameters *v1alpha1.VariableParameters
 		variable   *gitlab.InstanceVariable
@@ -100,6 +101,7 @@ func TestLateInitializeVariable(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			LateInitializeVariable(tc.parameters, tc.variable)
 			if diff := cmp.Diff(tc.want, tc.parameters); diff != "" {
 				t.Errorf("LateInitializeVariable(...): -want, +got:\n%s", diff)
@@ -109,6 +111,7 @@ func TestLateInitializeVariable(t *testing.T) {
 }
 
 func TestNewVariableClient(t *testing.T) {
+	t.Parallel()
 	defer func() {
 		if r := recover(); r != nil {
 			t.Fatalf("NewVariableClient panicked: %v", r)
@@ -121,6 +124,7 @@ func TestNewVariableClient(t *testing.T) {
 }
 
 func TestGenerateCreateVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.VariableParameters
 	}
@@ -163,6 +167,7 @@ func TestGenerateCreateVariableOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateVariableOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateCreateVariableOptions(...): -want, +got:\n%s", diff)
@@ -172,6 +177,7 @@ func TestGenerateCreateVariableOptions(t *testing.T) {
 }
 
 func TestGenerateUpdateVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.VariableParameters
 	}
@@ -202,6 +208,7 @@ func TestGenerateUpdateVariableOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateUpdateVariableOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateUpdateVariableOptions(...): -want, +got:\n%s", diff)
@@ -211,6 +218,7 @@ func TestGenerateUpdateVariableOptions(t *testing.T) {
 }
 
 func TestIsVariableUpToDate(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		p        *v1alpha1.VariableParameters
 		variable *gitlab.InstanceVariable
@@ -267,6 +275,7 @@ func TestIsVariableUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsVariableUpToDate(tc.p, tc.variable)
 			if got != tc.want {
 				t.Errorf("IsVariableUpToDate(...) = %v, want %v", got, tc.want)

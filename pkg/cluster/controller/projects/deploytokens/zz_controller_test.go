@@ -95,6 +95,7 @@ func deployToken(m ...deployTokenModifier) *v1alpha1.DeployToken {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -261,6 +262,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.deployToken}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -278,6 +280,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalCreation
@@ -353,6 +356,7 @@ func TestCreate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.deployToken}
 			o, err := e.Create(context.Background(), tc.args.cr)
 
@@ -370,6 +374,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -391,6 +396,7 @@ func TestUpdate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.deployToken}
 			o, err := e.Update(context.Background(), tc.args.cr)
 
@@ -408,6 +414,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		err error
@@ -501,6 +508,7 @@ func TestDelete(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{client: tc.deployToken}
 			_, err := e.Delete(context.Background(), tc.args.cr)
 

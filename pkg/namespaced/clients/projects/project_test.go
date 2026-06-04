@@ -143,6 +143,7 @@ var (
 )
 
 func TestGenerateObservation(t *testing.T) {
+	t.Parallel()
 	id := int64(0)
 	idInt64 := int64(0)
 	public := true
@@ -419,6 +420,7 @@ func TestGenerateObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateObservation(tc.args.p)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -428,6 +430,7 @@ func TestGenerateObservation(t *testing.T) {
 }
 
 func TestGenerateCreateProjectOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		name       string
 		parameters *v1alpha1.ProjectParameters
@@ -595,6 +598,7 @@ func TestGenerateCreateProjectOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateProjectOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -604,6 +608,7 @@ func TestGenerateCreateProjectOptions(t *testing.T) {
 }
 
 func TestGenerateEditProjectOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		name       string
 		parameters *v1alpha1.ProjectParameters
@@ -764,6 +769,7 @@ func TestGenerateEditProjectOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateEditProjectOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

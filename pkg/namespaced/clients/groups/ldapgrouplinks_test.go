@@ -10,6 +10,7 @@ import (
 )
 
 func TestGenerateAddLdapGroupLinkOptions(t *testing.T) {
+	t.Parallel()
 	cn := "ldap-cn"
 	groupAccess := 10
 	ldapProvider := "ldapmain"
@@ -38,6 +39,7 @@ func TestGenerateAddLdapGroupLinkOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateAddLdapGroupLinkOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

@@ -77,6 +77,7 @@ var (
 )
 
 func TestGenerateObservation(t *testing.T) {
+	t.Parallel()
 	id := int64(0)
 	webURL := "web.url"
 	fullName := "Full name"
@@ -202,6 +203,7 @@ func TestGenerateObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateObservation(tc.args.p)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -211,6 +213,7 @@ func TestGenerateObservation(t *testing.T) {
 }
 
 func TestGenerateCreateGroupOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		name       string
 		parameters *v1alpha1.GroupParameters
@@ -287,6 +290,7 @@ func TestGenerateCreateGroupOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateGroupOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -296,6 +300,7 @@ func TestGenerateCreateGroupOptions(t *testing.T) {
 }
 
 func TestGenerateEditGroupOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		name       string
 		parameters *v1alpha1.GroupParameters
@@ -369,6 +374,7 @@ func TestGenerateEditGroupOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateEditGroupOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

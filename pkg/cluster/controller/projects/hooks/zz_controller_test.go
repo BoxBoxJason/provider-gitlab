@@ -124,6 +124,7 @@ func projecthook(m ...projectHookModifier) *v1alpha1.Hook {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     *v1alpha1.Hook
 		result managed.ExternalObservation
@@ -247,6 +248,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.projecthook}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -264,6 +266,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     *v1alpha1.Hook
 		result managed.ExternalCreation
@@ -329,6 +332,7 @@ func TestCreate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.projecthook}
 			o, err := e.Create(context.Background(), tc.args.cr)
 
@@ -346,6 +350,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     *v1alpha1.Hook
 		result managed.ExternalUpdate
@@ -420,6 +425,7 @@ func TestUpdate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.projecthook}
 			o, err := e.Update(context.Background(), tc.args.cr)
 
@@ -436,6 +442,7 @@ func TestUpdate(t *testing.T) {
 	}
 }
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  *v1alpha1.Hook
 		err error
@@ -519,6 +526,7 @@ func TestDelete(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{client: tc.projecthook}
 			_, err := e.Delete(context.Background(), tc.args.cr)
 

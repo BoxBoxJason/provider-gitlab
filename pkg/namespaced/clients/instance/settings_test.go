@@ -26,6 +26,7 @@ import (
 )
 
 func TestIsDefaultBranchProtectionDefaultsPtrEqualToDefaultsPtr(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		dbpdv *v1alpha1.DefaultBranchProtectionDefaultsOptions
 		dbpdg *gitlab.BranchProtectionDefaults
@@ -120,6 +121,7 @@ func TestIsDefaultBranchProtectionDefaultsPtrEqualToDefaultsPtr(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := isDefaultBranchProtectionDefaultsPtrEqualToDefaultsPtr(tc.args.dbpdv, tc.args.dbpdg)
 			if got != tc.want {
 				t.Errorf("isDefaultBranchProtectionDefaultsPtrEqualToDefaultsPtr() = %v, want %v", got, tc.want)
@@ -129,6 +131,7 @@ func TestIsDefaultBranchProtectionDefaultsPtrEqualToDefaultsPtr(t *testing.T) {
 }
 
 func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaults(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		input *gitlab.BranchProtectionDefaults
 	}
@@ -172,6 +175,7 @@ func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaults(t *tes
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := gitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaults(tc.args.input)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("gitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaults() mismatch (-want +got):\n%s", diff)
@@ -181,6 +185,7 @@ func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaults(t *tes
 }
 
 func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaultsOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		input *gitlab.BranchProtectionDefaults
 	}
@@ -214,6 +219,7 @@ func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaultsOptions
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := gitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaultsOptions(tc.args.input)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("gitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaultsOptions() mismatch (-want +got):\n%s", diff)
@@ -223,6 +229,7 @@ func TestGitlabBranchProtectionDefaultsTov1Alpha1BranchProtectionDefaultsOptions
 }
 
 func TestV1Alpha1DefaultBranchProtectionDefaultsOptionsPtrToGitlabBranchProtectionDefaults(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		input *v1alpha1.DefaultBranchProtectionDefaultsOptions
 	}
@@ -256,6 +263,7 @@ func TestV1Alpha1DefaultBranchProtectionDefaultsOptionsPtrToGitlabBranchProtecti
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := v1Alpha1DefaultBranchProtectionDefaultsOptionsPtrToGitlabBranchProtectionDefaults(tc.args.input)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("v1Alpha1DefaultBranchProtectionDefaultsOptionsPtrToGitlabBranchProtectionDefaults() mismatch (-want +got):\n%s", diff)
@@ -265,6 +273,7 @@ func TestV1Alpha1DefaultBranchProtectionDefaultsOptionsPtrToGitlabBranchProtecti
 }
 
 func TestGroupAccessSliceToIntSlice(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		input []*gitlab.GroupAccessLevel
 	}
@@ -305,6 +314,7 @@ func TestGroupAccessSliceToIntSlice(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := groupAccessSliceToIntSlice(tc.args.input)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("groupAccessSliceToIntSlice() mismatch (-want +got):\n%s", diff)

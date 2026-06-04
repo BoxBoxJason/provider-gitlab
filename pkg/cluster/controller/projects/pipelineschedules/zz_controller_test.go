@@ -137,6 +137,7 @@ func buildPs(m ...psModifier) *v1alpha1.PipelineSchedule {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -328,6 +329,7 @@ func TestObserve(t *testing.T) {
 
 	for tn, tc := range tcs {
 		t.Run(tn, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: tc.kube, client: tc.client}
 			result, err := victim.Observe(context.Background(), tc.args.cr)
 
@@ -347,6 +349,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		cr     resource.Managed
 		err    error
@@ -398,6 +401,7 @@ func TestCreate(t *testing.T) {
 
 	for tn, tc := range tcs {
 		t.Run(tn, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: tc.kube, client: tc.client}
 			result, err := victim.Create(context.Background(), tc.args.cr)
 
@@ -417,6 +421,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -562,6 +567,7 @@ func TestUpdate(t *testing.T) {
 
 	for tn, tc := range tcs {
 		t.Run(tn, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: tc.kube, client: tc.client}
 			result, err := victim.Update(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.expected.err, err, test.EquateErrors()); diff != "" {
@@ -578,6 +584,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type expected struct {
 		cr  resource.Managed
 		err error
@@ -614,6 +621,7 @@ func TestDelete(t *testing.T) {
 
 	for tn, tc := range tcs {
 		t.Run(tn, func(t *testing.T) {
+			t.Parallel()
 			victim := &external{kube: tc.kube, client: tc.client}
 			_, err := victim.Delete(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.expected.err, err, test.EquateErrors()); diff != "" {

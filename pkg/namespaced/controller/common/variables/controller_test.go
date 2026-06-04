@@ -37,6 +37,7 @@ import (
 )
 
 func TestUpdateVariableFromSecret(t *testing.T) {
+	t.Parallel()
 	secretKey := "token"
 	secretValue := "s3cr3t"
 
@@ -122,6 +123,7 @@ func TestUpdateVariableFromSecret(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			err := variables.UpdateVariableFromSecret(tc.args.kube, mg, context.Background(), tc.args.selector, tc.args.params)
 			if diff := cmp.Diff(tc.err, err, test.EquateErrors()); diff != "" {
 				t.Fatalf("UpdateVariableFromSecret(...): -want err, +got err:\n%s", diff)

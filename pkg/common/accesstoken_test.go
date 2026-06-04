@@ -26,6 +26,7 @@ import (
 func intPtr(v int) *int { return &v }
 
 func TestSameDay(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		a, b time.Time
 		want bool
@@ -43,6 +44,7 @@ func TestSameDay(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			if got := SameDay(tc.a, tc.b); got != tc.want {
 				t.Errorf("SameDay() = %v, want %v", got, tc.want)
 			}
@@ -51,6 +53,7 @@ func TestSameDay(t *testing.T) {
 }
 
 func TestShouldRotateToken(t *testing.T) {
+	t.Parallel()
 	// Fixed dates for desiredExpiresAt / SameDay checks (no dependency on time.Now)
 	fixedDay := time.Date(2026, time.June, 1, 12, 0, 0, 0, time.UTC)
 	nextDay := fixedDay.Add(24 * time.Hour)
@@ -104,6 +107,7 @@ func TestShouldRotateToken(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			if got := ShouldRotateToken(tc.active, tc.createdAt, tc.actualExpiresAt, tc.desiredExpiresAt, tc.renewBeforeDays, tc.now); got != tc.want {
 				t.Errorf("ShouldRotateToken() = %v, want %v", got, tc.want)
 			}
@@ -112,10 +116,12 @@ func TestShouldRotateToken(t *testing.T) {
 }
 
 func TestRotationTime(t *testing.T) {
+	t.Parallel()
 	createdAt := time.Date(2026, time.January, 1, 0, 0, 0, 0, time.UTC)
 	expiresAt := time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC) // 30-day lifetime
 
 	t.Run("DefaultTwoThirds", func(t *testing.T) {
+		t.Parallel()
 		got, ok := RotationTime(createdAt, expiresAt, nil)
 		if !ok {
 			t.Fatal("expected ok=true")
@@ -128,6 +134,7 @@ func TestRotationTime(t *testing.T) {
 	})
 
 	t.Run("RenewBeforeDaysOverride", func(t *testing.T) {
+		t.Parallel()
 		got, ok := RotationTime(createdAt, expiresAt, intPtr(5))
 		if !ok {
 			t.Fatal("expected ok=true")
@@ -140,6 +147,7 @@ func TestRotationTime(t *testing.T) {
 	})
 
 	t.Run("NegativeLifetime", func(t *testing.T) {
+		t.Parallel()
 		_, ok := RotationTime(expiresAt, createdAt, nil)
 		if ok {
 			t.Fatal("expected ok=false for negative lifetime")
@@ -147,6 +155,7 @@ func TestRotationTime(t *testing.T) {
 	})
 
 	t.Run("RenewBeforeDaysWithNegativeLifetime", func(t *testing.T) {
+		t.Parallel()
 		// renewBeforeDays always returns ok=true regardless of lifetime ordering
 		got, ok := RotationTime(expiresAt, createdAt, intPtr(5))
 		if !ok {
@@ -160,6 +169,7 @@ func TestRotationTime(t *testing.T) {
 }
 
 func TestHasReachedRenewalTime(t *testing.T) {
+	t.Parallel()
 	createdAt := time.Date(2026, time.January, 1, 0, 0, 0, 0, time.UTC)
 	expiresAt := createdAt.Add(30 * time.Hour)
 	renewAt := createdAt.Add(20 * time.Hour) // 2/3 of 30h
@@ -183,22 +193,26 @@ func TestHasReachedRenewalTime(t *testing.T) {
 }
 
 func TestComputeNextRotation(t *testing.T) {
+	t.Parallel()
 	createdAt := time.Date(2026, time.January, 1, 0, 0, 0, 0, time.UTC)
 	expiresAt := time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC)
 
 	t.Run("NilCreatedAt", func(t *testing.T) {
+		t.Parallel()
 		if got := ComputeNextRotation(nil, (*gitlab.ISOTime)(&expiresAt), nil); got != nil {
 			t.Errorf("expected nil, got %v", got)
 		}
 	})
 
 	t.Run("NilExpiresAt", func(t *testing.T) {
+		t.Parallel()
 		if got := ComputeNextRotation(&createdAt, nil, nil); got != nil {
 			t.Errorf("expected nil, got %v", got)
 		}
 	})
 
 	t.Run("DefaultTwoThirds", func(t *testing.T) {
+		t.Parallel()
 		got := ComputeNextRotation(&createdAt, (*gitlab.ISOTime)(&expiresAt), nil)
 		if got == nil {
 			t.Fatal("expected non-nil")
@@ -210,6 +224,7 @@ func TestComputeNextRotation(t *testing.T) {
 	})
 
 	t.Run("WithRenewBeforeDays", func(t *testing.T) {
+		t.Parallel()
 		got := ComputeNextRotation(&createdAt, (*gitlab.ISOTime)(&expiresAt), intPtr(5))
 		if got == nil {
 			t.Fatal("expected non-nil")
@@ -222,6 +237,7 @@ func TestComputeNextRotation(t *testing.T) {
 }
 
 func TestGenerateRenewalExpiration(t *testing.T) {
+	t.Parallel()
 	got := GenerateRenewalExpiration(30)
 	if got == nil {
 		t.Fatal("expected non-nil")

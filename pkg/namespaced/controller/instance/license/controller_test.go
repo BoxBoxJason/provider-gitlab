@@ -145,6 +145,7 @@ func mockSecret(name, namespace string, data map[string][]byte) func(client.Obje
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	now := metav1.Now()
 	type want struct {
 		cr  resource.Managed
@@ -393,6 +394,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			obs, err := e.Observe(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.want.err, err, test.EquateErrors()); diff != "" {
@@ -409,6 +411,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		out managed.ExternalCreation
@@ -464,6 +467,7 @@ func TestCreate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			out, err := e.Create(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.want.err, err, test.EquateErrors()); diff != "" {
@@ -480,6 +484,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		out managed.ExternalUpdate
@@ -557,6 +562,7 @@ func TestUpdate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			out, err := e.Update(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.want.err, err, test.EquateErrors()); diff != "" {
@@ -573,6 +579,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		out managed.ExternalDelete
@@ -629,6 +636,7 @@ func TestDelete(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			out, err := e.Delete(context.Background(), tc.args.cr)
 			if diff := cmp.Diff(tc.want.err, err, test.EquateErrors()); diff != "" {
@@ -645,6 +653,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestDisconnect(t *testing.T) {
+	t.Parallel()
 	e := &external{}
 	if err := e.Disconnect(context.Background()); err != nil {
 		t.Fatalf("expected nil error")
@@ -652,6 +661,7 @@ func TestDisconnect(t *testing.T) {
 }
 
 func TestConnectorConnectInvalidInput(t *testing.T) {
+	t.Parallel()
 	c := &connector{kube: kubeClient(t)}
 	_, err := c.Connect(context.Background(), unexpectedItem)
 	if diff := cmp.Diff(errors.New(errNotLicense), err, test.EquateErrors()); diff != "" {
@@ -660,6 +670,7 @@ func TestConnectorConnectInvalidInput(t *testing.T) {
 }
 
 func TestIsResponseNotFound(t *testing.T) {
+	t.Parallel()
 	if clients.IsResponseNotFound(nil) {
 		t.Fatalf("expected false")
 	}

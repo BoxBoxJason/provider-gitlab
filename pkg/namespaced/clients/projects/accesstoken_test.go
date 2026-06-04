@@ -28,6 +28,7 @@ import (
 )
 
 func TestGenerateCreateProjectAccessTokenOptions(t *testing.T) {
+	t.Parallel()
 	name := "Name"
 	var expiresAt time.Time
 	renewalPeriodDays30 := 30
@@ -102,6 +103,7 @@ func TestGenerateCreateProjectAccessTokenOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateProjectAccessTokenOptions(tc.args.name, tc.args.parameters)
 
 			if tc.want.Name != nil && got.Name != nil && *tc.want.Name != *got.Name {
@@ -148,6 +150,7 @@ func TestGenerateCreateProjectAccessTokenOptions(t *testing.T) {
 }
 
 func TestGenerateProjectAccessTokenObservation(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	createdAt := time.Now().UTC().Add(-time.Hour).Truncate(time.Second)
 
@@ -184,6 +187,7 @@ func TestGenerateProjectAccessTokenObservation(t *testing.T) {
 }
 
 func TestGenerateRotateProjectAccessTokenOptions(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	renewalPeriodDays30 := 30
 
@@ -209,6 +213,7 @@ func TestGenerateRotateProjectAccessTokenOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateRotateProjectAccessTokenOptions(tc.params)
 
 			switch {
@@ -239,6 +244,7 @@ func TestGenerateRotateProjectAccessTokenOptions(t *testing.T) {
 }
 
 func TestShouldRotateProjectAccessToken(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	otherExpiresAt := expiresAt.Add(24 * time.Hour)
 
@@ -345,6 +351,7 @@ func TestShouldRotateProjectAccessToken(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := ShouldRotateAccessToken(tc.params, tc.at)
 			if got != tc.want {
 				t.Errorf("ShouldRotateAccessToken() = %v, want %v", got, tc.want)

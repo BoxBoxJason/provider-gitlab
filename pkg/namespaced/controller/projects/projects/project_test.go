@@ -151,6 +151,7 @@ func project(m ...projectModifier) *v1alpha1.Project {
 }
 
 func TestConnect(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalClient
@@ -184,6 +185,7 @@ func TestConnect(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			c := &connector{kube: tc.kube, newGitlabClientFn: nil}
 			o, err := c.Connect(context.Background(), tc.args.cr)
 
@@ -198,6 +200,7 @@ func TestConnect(t *testing.T) {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -1097,6 +1100,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.project}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -1114,6 +1118,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalCreation
@@ -1167,6 +1172,7 @@ func TestCreate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.project}
 			o, err := e.Create(context.Background(), tc.args.cr)
 
@@ -1185,6 +1191,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -1362,6 +1369,7 @@ func TestUpdate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.project}
 			e.cache.externalPushRules = tc.cacheExternalPushRules
 			e.cache.isPushRulesUpToDate = tc.cachePushRulesUpToDate
@@ -1385,20 +1393,23 @@ func withPermanentlyRemove(b *bool) projectModifier {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type deleteProjectCalls struct {
 		Pid interface{}
 		Opt *gitlab.DeleteProjectOptions
 	}
-	var recordedCalls []deleteProjectCalls
 	type want struct {
 		cr    resource.Managed
 		calls []deleteProjectCalls
 		err   error
 	}
 
+	var permanentDeletionCalls []deleteProjectCalls
+
 	cases := map[string]struct {
 		args
 		want
+		recorder *[]deleteProjectCalls
 	}{
 		"InValidInput": {
 			args: args{
@@ -1441,7 +1452,7 @@ func TestDelete(t *testing.T) {
 			args: args{
 				project: &fake.MockClient{
 					MockDeleteProject: func(pid interface{}, opt *gitlab.DeleteProjectOptions, options ...gitlab.RequestOptionFunc) (*gitlab.Response, error) {
-						recordedCalls = append(recordedCalls, deleteProjectCalls{Pid: pid, Opt: opt})
+						permanentDeletionCalls = append(permanentDeletionCalls, deleteProjectCalls{Pid: pid, Opt: opt})
 						return &gitlab.Response{}, nil
 					},
 				},
@@ -1452,6 +1463,7 @@ func TestDelete(t *testing.T) {
 					withStatus(v1alpha1.ProjectObservation{PathWithNamespace: "path/to/project"}),
 				),
 			},
+			recorder: &permanentDeletionCalls,
 			want: want{
 				cr: project(
 					withExternalName("0"),
@@ -1469,7 +1481,7 @@ func TestDelete(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			recordedCalls = nil
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.project}
 			_, err := e.Delete(context.Background(), tc.args.cr)
 
@@ -1479,8 +1491,10 @@ func TestDelete(t *testing.T) {
 			if diff := cmp.Diff(tc.want.cr, tc.args.cr, test.EquateConditions()); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
 			}
-			if diff := cmp.Diff(tc.want.calls, recordedCalls, test.EquateConditions()); diff != "" {
-				t.Errorf("r: -want, +got:\n%s", diff)
+			if tc.recorder != nil {
+				if diff := cmp.Diff(tc.want.calls, *tc.recorder, test.EquateConditions()); diff != "" {
+					t.Errorf("r: -want, +got:\n%s", diff)
+				}
 			}
 		})
 	}
@@ -1493,6 +1507,7 @@ func TestDelete(t *testing.T) {
 // ImportURLSecretRef is used: GitLab never echoes back the token/password, so
 // the comparison must be done on the sanitized URL.
 func TestSanitizeImportURL(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		input string
 		want  string
@@ -1531,6 +1546,7 @@ func TestSanitizeImportURL(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := sanitizeImportURL(tc.input)
 			if got != tc.want {
 				t.Errorf("sanitizeImportURL(%q) = %q, want %q", tc.input, got, tc.want)

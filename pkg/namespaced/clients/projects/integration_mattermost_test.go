@@ -61,6 +61,7 @@ var (
 // TestGenerateSetMattermostServiceOptions tests the conversion from
 // IntegrationMattermostParameters to GitLab SetMattermostServiceOptions
 func TestGenerateSetMattermostServiceOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *projectsv1alpha1.IntegrationMattermostParameters
 	}
@@ -153,6 +154,7 @@ func TestGenerateSetMattermostServiceOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateSetMattermostServiceOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateSetMattermostServiceOptions(): -want, +got:\n%s", diff)
@@ -164,6 +166,7 @@ func TestGenerateSetMattermostServiceOptions(t *testing.T) {
 // TestGenerateIntegrationMattermostObservation tests the conversion from
 // GitLab MattermostService to IntegrationMattermostObservation
 func TestGenerateIntegrationMattermostObservation(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		service *gitlab.MattermostService
 	}
@@ -318,6 +321,7 @@ func TestGenerateIntegrationMattermostObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateIntegrationMattermostObservation(tc.args.service)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateIntegrationMattermostObservation(): -want, +got:\n%s", diff)
@@ -328,6 +332,7 @@ func TestGenerateIntegrationMattermostObservation(t *testing.T) {
 
 // TestIsIntegrationMattermostUpToDate tests whether the spec matches the observation
 func TestIsIntegrationMattermostUpToDate(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		spec        *projectsv1alpha1.IntegrationMattermostParameters
 		observation *gitlab.MattermostService
@@ -495,6 +500,7 @@ func TestIsIntegrationMattermostUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsIntegrationMattermostUpToDate(tc.args.spec, tc.args.observation)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("IsIntegrationMattermostUpToDate(): -want, +got:\n%s", diff)

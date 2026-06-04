@@ -42,6 +42,7 @@ var (
 )
 
 func TestLateInitializeVariable(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		parameters *v1alpha1.VariableParameters
 		variable   *gitlab.ProjectVariable
@@ -71,6 +72,7 @@ func TestLateInitializeVariable(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			LateInitializeVariable(tc.parameters, tc.variable)
 			if diff := cmp.Diff(tc.want, tc.parameters); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -80,6 +82,7 @@ func TestLateInitializeVariable(t *testing.T) {
 }
 
 func TestGenerateCreateVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.VariableParameters
 	}
@@ -130,6 +133,7 @@ func TestGenerateCreateVariableOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateVariableOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -139,6 +143,7 @@ func TestGenerateCreateVariableOptions(t *testing.T) {
 }
 
 func TestGenerateUpdateVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.VariableParameters
 	}
@@ -174,6 +179,7 @@ func TestGenerateUpdateVariableOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateUpdateVariableOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -183,6 +189,7 @@ func TestGenerateUpdateVariableOptions(t *testing.T) {
 }
 
 func TestIsVariableUpToDate(t *testing.T) {
+	t.Parallel()
 	projectVariableKey := "KEY"
 	var projectVariableValue = "VALUE"
 	var projectVariableDescription = "DESCRIPTION"
@@ -472,6 +479,7 @@ func TestIsVariableUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsVariableUpToDate(tc.args.p, tc.args.variable)
 			if got != tc.want {
 				t.Errorf("IsVariableUpToDate(...) = %v, want %v", got, tc.want)
@@ -481,6 +489,7 @@ func TestIsVariableUpToDate(t *testing.T) {
 }
 
 func TestGenerateGetVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		p *v1alpha1.VariableParameters
 	}
@@ -509,6 +518,7 @@ func TestGenerateGetVariableOptions(t *testing.T) {
 	}
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateGetVariableOptions(tc.args.p)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -518,6 +528,7 @@ func TestGenerateGetVariableOptions(t *testing.T) {
 }
 
 func TestGenerateRemoveVariableOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		p *v1alpha1.VariableParameters
 	}
@@ -546,6 +557,7 @@ func TestGenerateRemoveVariableOptions(t *testing.T) {
 	}
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateRemoveVariableOptions(tc.args.p)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

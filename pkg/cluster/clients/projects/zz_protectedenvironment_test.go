@@ -13,6 +13,7 @@ import (
 )
 
 func TestFilterRuleSpecs_DropsEmptySubjects(t *testing.T) {
+	t.Parallel()
 
 	in := []v1alpha1.EnvironmentApprovalRuleParameters{
 
@@ -36,6 +37,7 @@ func TestFilterRuleSpecs_DropsEmptySubjects(t *testing.T) {
 }
 
 func TestFilterDeploySpecs_DropsEmptySubjects(t *testing.T) {
+	t.Parallel()
 
 	in := []v1alpha1.EnvironmentAccessLevelParameters{
 
@@ -59,6 +61,7 @@ func TestFilterDeploySpecs_DropsEmptySubjects(t *testing.T) {
 }
 
 func TestMatchApprovalRules_OrderInsensitive(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentApprovalRuleParameters{
 
@@ -83,6 +86,7 @@ func TestMatchApprovalRules_OrderInsensitive(t *testing.T) {
 }
 
 func TestMatchDeployAccessLevels_OrderInsensitive(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentAccessLevelParameters{
 
@@ -107,6 +111,7 @@ func TestMatchDeployAccessLevels_OrderInsensitive(t *testing.T) {
 }
 
 func TestBuildApprovalRulesDelta_UnmanagedNilSpec(t *testing.T) {
+	t.Parallel()
 
 	got := []*gitlab.EnvironmentApprovalRule{
 
@@ -124,6 +129,7 @@ func TestBuildApprovalRulesDelta_UnmanagedNilSpec(t *testing.T) {
 }
 
 func TestBuildApprovalRulesDelta_EmptySpecDeletesAll_WithSubject(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentApprovalRuleParameters{}
 
@@ -169,6 +175,7 @@ func TestBuildApprovalRulesDelta_EmptySpecDeletesAll_WithSubject(t *testing.T) {
 }
 
 func TestBuildApprovalRulesDelta_UpdateRequiredApprovalsByIdentity(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentApprovalRuleParameters{
 
@@ -205,6 +212,7 @@ func TestBuildApprovalRulesDelta_UpdateRequiredApprovalsByIdentity(t *testing.T)
 }
 
 func TestBuildApprovalRulesDelta_ReplaceSubject_DeleteOldCreateNew(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentApprovalRuleParameters{
 
@@ -273,6 +281,7 @@ func TestBuildApprovalRulesDelta_ReplaceSubject_DeleteOldCreateNew(t *testing.T)
 }
 
 func TestBuildDeployAccessLevelsDelta_UnmanagedNilSpec(t *testing.T) {
+	t.Parallel()
 
 	got := []*gitlab.EnvironmentAccessDescription{
 
@@ -290,6 +299,7 @@ func TestBuildDeployAccessLevelsDelta_UnmanagedNilSpec(t *testing.T) {
 }
 
 func TestBuildDeployAccessLevelsDelta_EmptySpecDeletesAll(t *testing.T) {
+	t.Parallel()
 
 	spec := []v1alpha1.EnvironmentAccessLevelParameters{}
 
@@ -327,6 +337,7 @@ func TestBuildDeployAccessLevelsDelta_EmptySpecDeletesAll(t *testing.T) {
 }
 
 func TestGenerateUpdateProtectedEnvironmentsOptions_NoChangesReturnsNil(t *testing.T) {
+	t.Parallel()
 
 	als := []v1alpha1.EnvironmentAccessLevelParameters{{AccessLevel: ptr.To(20)}}
 
@@ -365,6 +376,7 @@ func TestGenerateUpdateProtectedEnvironmentsOptions_NoChangesReturnsNil(t *testi
 }
 
 func TestGenerateUpdateProtectedEnvironmentsOptions_ApprovalCountOnlyWhenRulesExplicitEmpty(t *testing.T) {
+	t.Parallel()
 
 	emptyRules := []v1alpha1.EnvironmentApprovalRuleParameters{}
 
@@ -388,6 +400,7 @@ func TestGenerateUpdateProtectedEnvironmentsOptions_ApprovalCountOnlyWhenRulesEx
 }
 
 func TestSameAccessSubject_PrefersUserOverGroupOverAccessLevel(t *testing.T) {
+	t.Parallel()
 
 	if !sameAccessSubject(ptr.To(40), ptr.To(int64(1)), ptr.To(int64(2)), 40, 1, 2) {
 
@@ -416,6 +429,7 @@ func TestSameAccessSubject_PrefersUserOverGroupOverAccessLevel(t *testing.T) {
 }
 
 func TestFilterRuleSpecs_StableOutput(t *testing.T) {
+	t.Parallel()
 
 	in := []v1alpha1.EnvironmentApprovalRuleParameters{
 

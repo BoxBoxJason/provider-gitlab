@@ -28,6 +28,7 @@ import (
 )
 
 func TestGenerateCreateGroupDeployTokenOptions(t *testing.T) {
+	t.Parallel()
 	name := "Name"
 	username := "Username"
 	expiresAt := time.Now()
@@ -71,6 +72,7 @@ func TestGenerateCreateGroupDeployTokenOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateGroupDeployTokenOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

@@ -29,6 +29,7 @@ import (
 )
 
 func TestGenerateAddLicenseOptions(t *testing.T) {
+	t.Parallel()
 	tests := map[string]struct {
 		in   string
 		want string
@@ -45,6 +46,7 @@ func TestGenerateAddLicenseOptions(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateAddLicenseOptions(tc.in)
 			if got == nil {
 				t.Fatalf("GenerateAddLicenseOptions(%q) returned nil", tc.in)
@@ -60,6 +62,7 @@ func TestGenerateAddLicenseOptions(t *testing.T) {
 }
 
 func TestIsLicenseUpToDate(t *testing.T) {
+	t.Parallel()
 	spec := &v1alpha1.LicenseParameters{}
 	tests := map[string]struct {
 		spec     *v1alpha1.LicenseParameters
@@ -90,6 +93,7 @@ func TestIsLicenseUpToDate(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsLicenseUpToDate(tc.spec, tc.observed)
 			if got != tc.want {
 				t.Fatalf("IsLicenseUpToDate() = %v, want %v", got, tc.want)
@@ -99,6 +103,7 @@ func TestIsLicenseUpToDate(t *testing.T) {
 }
 
 func TestGenerateLicenseObservation(t *testing.T) {
+	t.Parallel()
 	created := time.Date(2020, time.January, 2, 3, 4, 5, 0, time.UTC)
 
 	observed := &gitlab.License{
@@ -144,6 +149,7 @@ func TestGenerateLicenseObservation(t *testing.T) {
 }
 
 func TestNewLicenseClient(t *testing.T) {
+	t.Parallel()
 	// Should not panic and should return a non-nil LicenseClient
 	cfg := common.Config{}
 	c := NewLicenseClient(cfg)

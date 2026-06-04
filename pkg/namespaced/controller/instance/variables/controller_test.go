@@ -200,6 +200,7 @@ func (m *fakeManager) GetAPIReader() client.Reader               { return m.cl }
 func (m *fakeManager) GetConverterRegistry() conversion.Registry { return nil }
 
 func TestSetupVariableGated(t *testing.T) {
+	t.Parallel()
 	g := &recordingGate{}
 	o := controller.Options{Gate: g}
 
@@ -220,6 +221,7 @@ func TestSetupVariableGated(t *testing.T) {
 }
 
 func TestSetupVariableReturnsAddError(t *testing.T) {
+	t.Parallel()
 	s := runtime.NewScheme()
 	if err := v1alpha1.SchemeBuilder.AddToScheme(s); err != nil {
 		t.Fatalf("AddToScheme(...) error = %v", err)
@@ -243,6 +245,7 @@ func TestSetupVariableReturnsAddError(t *testing.T) {
 }
 
 func TestConnectAndDisconnect(t *testing.T) {
+	t.Parallel()
 	c := &connector{
 		kube:              &test.MockClient{},
 		newGitlabClientFn: func(common.Config) instance.VariableClient { return nil },
@@ -263,6 +266,7 @@ func TestConnectAndDisconnect(t *testing.T) {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -393,6 +397,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			got, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -410,6 +415,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalCreation
@@ -458,6 +464,7 @@ func TestCreate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			got, err := e.Create(context.Background(), tc.args.cr)
 
@@ -475,6 +482,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -522,6 +530,7 @@ func TestUpdate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			got, err := e.Update(context.Background(), tc.args.cr)
 
@@ -539,6 +548,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalDelete
@@ -573,6 +583,7 @@ func TestDelete(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.args.kube, client: tc.args.client}
 			got, err := e.Delete(context.Background(), tc.args.cr)
 

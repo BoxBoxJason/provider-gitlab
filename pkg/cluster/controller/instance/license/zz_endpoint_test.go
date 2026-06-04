@@ -65,6 +65,7 @@ func licenseCR() *v1alpha1.License {
 }
 
 func TestGetLicenseFromSecrets(t *testing.T) {
+	t.Parallel()
 	licenseValue := "my-license"
 	licenseKey := "license"
 
@@ -73,6 +74,7 @@ func TestGetLicenseFromSecrets(t *testing.T) {
 	token := "token"
 
 	t.Run("FromEndpointURLWithTokenInSpec", func(t *testing.T) {
+		t.Parallel()
 		// Server validates that token auth is used (Bearer)
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if got := r.Header.Get("Authorization"); got != "Bearer "+token {
@@ -103,6 +105,7 @@ func TestGetLicenseFromSecrets(t *testing.T) {
 	})
 
 	t.Run("FromEndpointURLSecretRefWithBasicAuthSecrets", func(t *testing.T) {
+		t.Parallel()
 		encoded := base64.StdEncoding.EncodeToString([]byte(basicUser + ":" + basicPass))
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if got := r.Header.Get("Authorization"); got != "Basic "+encoded {
@@ -166,6 +169,7 @@ func TestGetLicenseFromSecrets(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube}
 			cd, err := e.getLicenseFromSecrets(tc.mg, context.Background(), tc.params)
 			if diff := cmp.Diff(tc.wantCD, cd); diff != "" {
@@ -185,6 +189,7 @@ func TestGetLicenseFromSecrets(t *testing.T) {
 }
 
 func TestGetEndpointURL(t *testing.T) {
+	t.Parallel()
 	e := &external{kube: newKube(t)}
 	mg := licenseCR()
 	params := &v1alpha1.LicenseParameters{LicenseEndpointURL: stringPtr("http://example")}
@@ -196,6 +201,7 @@ func TestGetEndpointURL(t *testing.T) {
 }
 
 func TestIsErrorFetchingLicenseFromEndpoint(t *testing.T) {
+	t.Parallel()
 	if isErrorFetchingLicenseFromEndpoint(nil) {
 		t.Fatalf("expected false for nil error")
 	}

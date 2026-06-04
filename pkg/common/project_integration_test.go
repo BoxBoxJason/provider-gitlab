@@ -30,6 +30,7 @@ import (
 // TestGenerateCommonIntegrationObservation tests the conversion from
 // GitLab Service to CommonIntegrationObservation
 func TestGenerateCommonIntegrationObservation(t *testing.T) {
+	t.Parallel()
 	// Test data
 	testID := int64(123)
 	testTitle := "Test Integration"
@@ -324,6 +325,7 @@ func TestGenerateCommonIntegrationObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCommonIntegrationObservation(tc.args.integration)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateCommonIntegrationObservation(): -want, +got:\n%s", diff)

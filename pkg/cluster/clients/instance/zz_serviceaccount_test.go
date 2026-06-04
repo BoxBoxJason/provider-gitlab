@@ -31,6 +31,7 @@ import (
 const testEmail = "name@example.org"
 
 func TestGenerateServiceAccountObservation(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		user *gitlab.User
 	}
@@ -49,6 +50,7 @@ func TestGenerateServiceAccountObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateServiceAccountObservation(tc.args.user)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateServiceAccountObservation(): -want, +got:\n%s", diff)
@@ -58,6 +60,7 @@ func TestGenerateServiceAccountObservation(t *testing.T) {
 }
 
 func TestGenerateUpdateServiceAccountOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		params *v1alpha1.ServiceAccountParameters
 	}
@@ -78,6 +81,7 @@ func TestGenerateUpdateServiceAccountOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateUpdateServiceAccountOptions(tc.args.params)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateUpdateServiceAccountOptions(): -want, +got:\n%s", diff)
@@ -87,6 +91,7 @@ func TestGenerateUpdateServiceAccountOptions(t *testing.T) {
 }
 
 func TestGenerateServiceAccountCreateOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		params *v1alpha1.ServiceAccountParameters
 	}
@@ -107,6 +112,7 @@ func TestGenerateServiceAccountCreateOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateServiceAccountCreateOptions(tc.args.params)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateServiceAccountCreateOptions(): -want, +got:\n%s", diff)
@@ -116,6 +122,7 @@ func TestGenerateServiceAccountCreateOptions(t *testing.T) {
 }
 
 func TestIsServiceAccountUpToDate(t *testing.T) {
+	t.Parallel()
 	name := "name"
 	username := "user"
 	email := testEmail
@@ -154,6 +161,7 @@ func TestIsServiceAccountUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsServiceAccountUpToDate(tc.args.params, tc.args.user)
 			if got != tc.want {
 				t.Errorf("IsServiceAccountUpToDate() = %v, want %v", got, tc.want)

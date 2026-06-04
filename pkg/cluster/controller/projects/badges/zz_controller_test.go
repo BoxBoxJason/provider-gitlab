@@ -114,6 +114,7 @@ type args struct {
 }
 
 func TestConnect(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalClient
@@ -136,6 +137,7 @@ func TestConnect(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			c := &connector{kube: tc.kube, newGitlabClientFn: nil}
 			o, err := c.Connect(context.Background(), tc.args.cr)
 
@@ -150,6 +152,7 @@ func TestConnect(t *testing.T) {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -228,6 +231,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.badge}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -245,8 +249,10 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreateUpdateDeleteDisconnect(t *testing.T) {
+	t.Parallel()
 	// Add tests for Create, Update, Delete and Disconnect
 	t.Run("CreateInvalidInput", func(t *testing.T) {
+		t.Parallel()
 		e := &external{kube: nil, client: nil}
 		_, err := e.Create(context.Background(), unexpecedItem)
 		if diff := cmp.Diff(errors.New(errNotBadge), err, test.EquateErrors()); diff != "" {
@@ -255,6 +261,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("CreateMissingProjectID", func(t *testing.T) {
+		t.Parallel()
 		cr := badge()
 		e := &external{kube: nil, client: &mockBadgeClient{}}
 		_, err := e.Create(context.Background(), cr)
@@ -264,6 +271,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("CreateWithExistingID", func(t *testing.T) {
+		t.Parallel()
 		id := int64(5)
 		cr := badge(withSpec(v1alpha1.BadgeParameters{ID: &id, ProjectID: &projectID}))
 		e := &external{kube: &test.MockClient{MockUpdate: test.NewMockUpdateFn(nil)}, client: &mockBadgeClient{GetFn: func(gid any, badge int64, options ...gitlab.RequestOptionFunc) (*gitlab.ProjectBadge, *gitlab.Response, error) {
@@ -279,6 +287,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("CreateSuccess", func(t *testing.T) {
+		t.Parallel()
 		name := "b"
 		cr := badge(withSpec(v1alpha1.BadgeParameters{Name: &name, ProjectID: &projectID}))
 		e := &external{kube: &test.MockClient{MockUpdate: test.NewMockUpdateFn(nil)}, client: &mockBadgeClient{AddFn: func(gid any, opt *gitlab.AddProjectBadgeOptions, options ...gitlab.RequestOptionFunc) (*gitlab.ProjectBadge, *gitlab.Response, error) {
@@ -294,6 +303,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("UpdateInvalidInput", func(t *testing.T) {
+		t.Parallel()
 		e := &external{kube: nil, client: nil}
 		_, err := e.Update(context.Background(), unexpecedItem)
 		if diff := cmp.Diff(errors.New(errNotBadge), err, test.EquateErrors()); diff != "" {
@@ -302,6 +312,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("UpdateParseExternalNameError", func(t *testing.T) {
+		t.Parallel()
 		cr := badge(withProjectID())
 		meta.SetExternalName(cr, "not-int")
 		e := &external{kube: nil, client: &mockBadgeClient{}}
@@ -312,6 +323,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("UpdateMissingProjectID", func(t *testing.T) {
+		t.Parallel()
 		cr := badge()
 		meta.SetExternalName(cr, "1")
 		e := &external{kube: nil, client: &mockBadgeClient{}}
@@ -322,6 +334,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("UpdateSuccess", func(t *testing.T) {
+		t.Parallel()
 		cr := badge(withProjectID())
 		meta.SetExternalName(cr, "1")
 		e := &external{kube: nil, client: &mockBadgeClient{EditFn: func(gid any, badge int64, opt *gitlab.EditProjectBadgeOptions, options ...gitlab.RequestOptionFunc) (*gitlab.ProjectBadge, *gitlab.Response, error) {
@@ -334,6 +347,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("DeleteInvalidInput", func(t *testing.T) {
+		t.Parallel()
 		e := &external{kube: nil, client: nil}
 		_, err := e.Delete(context.Background(), unexpecedItem)
 		if diff := cmp.Diff(errors.New(errNotBadge), err, test.EquateErrors()); diff != "" {
@@ -342,6 +356,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("DeleteParseExternalNameError", func(t *testing.T) {
+		t.Parallel()
 		cr := badge(withProjectID())
 		meta.SetExternalName(cr, "not-int")
 		e := &external{kube: nil, client: &mockBadgeClient{}}
@@ -352,6 +367,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("DeleteMissingProjectID", func(t *testing.T) {
+		t.Parallel()
 		cr := badge()
 		meta.SetExternalName(cr, "1")
 		e := &external{kube: nil, client: &mockBadgeClient{}}
@@ -362,6 +378,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("DeleteSuccess", func(t *testing.T) {
+		t.Parallel()
 		cr := badge(withProjectID())
 		meta.SetExternalName(cr, "1")
 		e := &external{kube: nil, client: &mockBadgeClient{DeleteFn: func(gid any, badge int64, options ...gitlab.RequestOptionFunc) (*gitlab.Response, error) {
@@ -374,6 +391,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 	})
 
 	t.Run("Disconnect", func(t *testing.T) {
+		t.Parallel()
 		e := &external{}
 		if err := e.Disconnect(context.Background()); err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -382,6 +400,7 @@ func TestCreateUpdateDeleteDisconnect(t *testing.T) {
 }
 
 func TestLateInitializeBadge(t *testing.T) {
+	t.Parallel()
 	p := &v1alpha1.BadgeParameters{}
 	lateInitializeBadge(p, nil)
 	if p.ID != nil || p.Name != nil {

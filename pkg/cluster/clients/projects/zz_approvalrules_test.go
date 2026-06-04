@@ -27,6 +27,7 @@ import (
 )
 
 func TestIsUsernamesUpToDate(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		cr   *v1alpha1.ApprovalRuleParameters
 		in   *gitlab.ProjectApprovalRule
@@ -101,6 +102,7 @@ func TestIsUsernamesUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := isUsernamesUpToDate(tc.cr, tc.in)
 			if got != tc.want {
 				t.Errorf("isUsernamesUpToDate() = %v, want %v", got, tc.want)
@@ -110,6 +112,7 @@ func TestIsUsernamesUpToDate(t *testing.T) {
 }
 
 func TestIsUserIDsUpToDate(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		cr   *v1alpha1.ApprovalRuleParameters
 		in   *gitlab.ProjectApprovalRule
@@ -184,6 +187,7 @@ func TestIsUserIDsUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := isUserIDsUpToDate(tc.cr, tc.in)
 			if got != tc.want {
 				t.Errorf("isUserIDsUpToDate() = %v, want %v", got, tc.want)

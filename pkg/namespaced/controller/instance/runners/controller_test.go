@@ -99,6 +99,7 @@ func runner(m ...RunnerModifier) *v1alpha1.Runner {
 }
 
 func TestConnect(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalClient
@@ -132,6 +133,7 @@ func TestConnect(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			c := &connector{kube: tc.kube, newGitlabClientFn: nil}
 			o, err := c.Connect(context.Background(), tc.args.cr)
 
@@ -146,6 +148,7 @@ func TestConnect(t *testing.T) {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -307,6 +310,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.runnerClient, userRunnerClient: tc.userRunnerClient}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -324,6 +328,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		err error
@@ -394,6 +399,7 @@ func TestDelete(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.runnerClient, userRunnerClient: tc.userRunnerClient}
 			_, err := e.Delete(context.Background(), tc.args.cr)
 
@@ -408,6 +414,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalCreation
@@ -522,6 +529,7 @@ func TestCreate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.runnerClient, userRunnerClient: tc.userRunnerClient}
 			o, err := e.Create(context.Background(), tc.args.cr)
 
@@ -539,6 +547,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -626,6 +635,7 @@ func TestUpdate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.runnerClient, userRunnerClient: tc.userRunnerClient}
 			o, err := e.Update(context.Background(), tc.args.cr)
 

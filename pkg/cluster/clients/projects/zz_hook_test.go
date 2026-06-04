@@ -50,6 +50,7 @@ var (
 )
 
 func TestGenerateHookObservation(t *testing.T) {
+	t.Parallel()
 	id := int64(0)
 	createdAt := time.Now()
 
@@ -76,6 +77,7 @@ func TestGenerateHookObservation(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateHookObservation(tc.args.ph)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -84,6 +86,7 @@ func TestGenerateHookObservation(t *testing.T) {
 	}
 }
 func TestLateInitializeHook(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		parameters  *v1alpha1.HookParameters
 		projecthook *gitlab.ProjectHook
@@ -123,6 +126,7 @@ func TestLateInitializeHook(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			LateInitializeHook(tc.parameters, tc.projecthook)
 			if diff := cmp.Diff(tc.want, tc.parameters); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -131,6 +135,7 @@ func TestLateInitializeHook(t *testing.T) {
 	}
 }
 func TestGenerateCreateHookOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.HookParameters
 		secret     *corev1.Secret
@@ -215,6 +220,7 @@ func TestGenerateCreateHookOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateHookOptions(tc.args.parameters, &tokenValue)
 
 			if diff := cmp.Diff(tc.want.addProjectHookOptions, got); diff != "" {
@@ -224,6 +230,7 @@ func TestGenerateCreateHookOptions(t *testing.T) {
 	}
 }
 func TestGenerateEditHookOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.HookParameters
 	}
@@ -270,6 +277,7 @@ func TestGenerateEditHookOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateEditHookOptions(tc.args.parameters, &tokenValue)
 
 			if diff := cmp.Diff(tc.want, got); diff != "" {
@@ -279,6 +287,7 @@ func TestGenerateEditHookOptions(t *testing.T) {
 	}
 }
 func TestIsHookUpToDate(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		projecthook *gitlab.ProjectHook
 		p           *v1alpha1.HookParameters
@@ -363,6 +372,7 @@ func TestIsHookUpToDate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsHookUpToDate(tc.args.p, tc.args.projecthook)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

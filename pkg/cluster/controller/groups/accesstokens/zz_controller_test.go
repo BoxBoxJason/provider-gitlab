@@ -102,6 +102,7 @@ func accessToken(m ...accessTokenModifier) *v1alpha1.AccessToken {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalObservation
@@ -537,6 +538,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.accessTokenClient}
 			o, err := e.Observe(context.Background(), tc.args.cr)
 
@@ -554,6 +556,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestObserveSetsAtProvider(t *testing.T) {
+	t.Parallel()
 	cr := accessToken(
 		withExternalName(sAccessTokenID),
 		withSpec(v1alpha1.AccessTokenParameters{GroupID: &id}),
@@ -577,10 +580,12 @@ func TestObserveSetsAtProvider(t *testing.T) {
 }
 
 func TestObserveSetsRenewAt(t *testing.T) {
+	t.Parallel()
 	createdAt := time.Date(2026, time.January, 1, 0, 0, 0, 0, time.UTC)
 	obsExpiresAt := time.Date(2026, time.January, 31, 0, 0, 0, 0, time.UTC)
 
 	t.Run("NilForExplicitExpiresAt", func(t *testing.T) {
+		t.Parallel()
 		cr := accessToken(
 			withExternalName(sAccessTokenID),
 			withSpec(v1alpha1.AccessTokenParameters{
@@ -606,6 +611,7 @@ func TestObserveSetsRenewAt(t *testing.T) {
 	})
 
 	t.Run("SetForRenewalPeriodDaysDefault", func(t *testing.T) {
+		t.Parallel()
 		renewalDays := 30
 		cr := accessToken(
 			withExternalName(sAccessTokenID),
@@ -637,6 +643,7 @@ func TestObserveSetsRenewAt(t *testing.T) {
 	})
 
 	t.Run("SetForRenewBeforeDaysOverride", func(t *testing.T) {
+		t.Parallel()
 		renewalDays := 30
 		renewBefore := 5
 		cr := accessToken(
@@ -671,6 +678,7 @@ func TestObserveSetsRenewAt(t *testing.T) {
 }
 
 func TestShouldRotateGroupAccessToken(t *testing.T) {
+	t.Parallel()
 	otherExpiresAt := expiresAt.Add(24 * time.Hour)
 
 	cases := map[string]struct {
@@ -713,6 +721,7 @@ func TestShouldRotateGroupAccessToken(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := groups.ShouldRotateAccessToken(tc.params, tc.at)
 			if got != tc.want {
 				t.Errorf("ShouldRotateAccessToken() = %v, want %v", got, tc.want)
@@ -722,6 +731,7 @@ func TestShouldRotateGroupAccessToken(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalCreation
@@ -867,6 +877,7 @@ func TestCreate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.accessTokenClient}
 			o, err := e.Create(context.Background(), tc.args.cr)
 
@@ -884,6 +895,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr     resource.Managed
 		result managed.ExternalUpdate
@@ -913,6 +925,7 @@ func TestUpdate(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{kube: tc.kube, client: tc.accessTokenClient}
 			o, err := e.Update(context.Background(), tc.args.cr)
 
@@ -930,6 +943,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 	type want struct {
 		cr  resource.Managed
 		err error
@@ -1021,6 +1035,7 @@ func TestDelete(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{client: tc.accessTokenClient}
 			_, err := e.Delete(context.Background(), tc.args.cr)
 

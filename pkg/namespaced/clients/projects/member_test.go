@@ -36,6 +36,7 @@ var (
 )
 
 func TestGenerateMemberObservation(t *testing.T) {
+	t.Parallel()
 	username := "User Name"
 	state := "State"
 	avatarURL := "Avatar URL"
@@ -74,6 +75,7 @@ func TestGenerateMemberObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateMemberObservation(tc.args.p)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -83,6 +85,7 @@ func TestGenerateMemberObservation(t *testing.T) {
 }
 
 func TestGenerateAddMemberOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.MemberParameters
 	}
@@ -122,6 +125,7 @@ func TestGenerateAddMemberOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateAddMemberOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)
@@ -131,6 +135,7 @@ func TestGenerateAddMemberOptions(t *testing.T) {
 }
 
 func TestGenerateEditMemberOptions(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		parameters *v1alpha1.MemberParameters
 	}
@@ -168,6 +173,7 @@ func TestGenerateEditMemberOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateEditMemberOptions(tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

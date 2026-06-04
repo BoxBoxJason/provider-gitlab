@@ -30,6 +30,7 @@ import (
 )
 
 func TestGenerateCreateProjectDeployTokenOptions(t *testing.T) {
+	t.Parallel()
 	name := "Name"
 	username := "Username"
 	expiresAt := time.Now()
@@ -73,6 +74,7 @@ func TestGenerateCreateProjectDeployTokenOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateProjectDeployTokenOptions(tc.args.name, tc.args.parameters)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("r: -want, +got:\n%s", diff)

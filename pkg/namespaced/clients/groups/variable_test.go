@@ -53,6 +53,7 @@ func variableTypePtr(vt commonv1alpha1.VariableType) *commonv1alpha1.VariableTyp
 }
 
 func TestIsVariableUpToDate(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		variable *gitlab.GroupVariable
 		p        *v1alpha1.VariableParameters
@@ -273,6 +274,7 @@ func TestIsVariableUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsVariableUpToDate(tc.args.p, tc.args.variable)
 			if got != tc.want {
 				t.Errorf("IsVariableUpToDate(...) = %v, want %v", got, tc.want)

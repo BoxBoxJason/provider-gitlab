@@ -44,6 +44,7 @@ func int64Ptr(i int64) *int64    { return &i }
 // They are unit tests only: no network calls and no controller-runtime dependencies.
 
 func TestIsErrorRunnerNotFound(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		err  error
 		want bool
@@ -64,6 +65,7 @@ func TestIsErrorRunnerNotFound(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsErrorRunnerNotFound(tc.err)
 			if got != tc.want {
 				t.Errorf("IsErrorRunnerNotFound() = %v, want %v", got, tc.want)
@@ -73,6 +75,7 @@ func TestIsErrorRunnerNotFound(t *testing.T) {
 }
 
 func TestGenerateCommonRunnerObservation(t *testing.T) {
+	t.Parallel()
 	contactedAt := time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC)
 
 	cases := map[string]struct {
@@ -127,6 +130,7 @@ func TestGenerateCommonRunnerObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := generateCommonRunnerObservation(tc.runner)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("generateCommonRunnerObservation() mismatch (-want +got):\n%s", diff)
@@ -136,6 +140,7 @@ func TestGenerateCommonRunnerObservation(t *testing.T) {
 }
 
 func TestGenerateInstanceRunnerObservation(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		runner *gitlab.RunnerDetails
 		want   instancev1alpha1.RunnerObservation
@@ -154,6 +159,7 @@ func TestGenerateInstanceRunnerObservation(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateInstanceRunnerObservation(tc.runner)
 			if diff := cmp.Diff(tc.want, got); diff != "" {
 				t.Errorf("GenerateInstanceRunnerObservation() mismatch (-want +got):\n%s", diff)
@@ -163,6 +169,7 @@ func TestGenerateInstanceRunnerObservation(t *testing.T) {
 }
 
 func TestGenerateObservationsGroupAndProject(t *testing.T) {
+	t.Parallel()
 	contactedAt := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	input := &gitlab.RunnerDetails{
@@ -208,6 +215,7 @@ func TestGenerateObservationsGroupAndProject(t *testing.T) {
 }
 
 func TestGenerateEditRunnerOptions(t *testing.T) {
+	t.Parallel()
 	params := &commonv1alpha1.CommonRunnerParameters{
 		Description:     stringPtr("desc"),
 		Paused:          boolPtr(true),
@@ -238,6 +246,7 @@ func TestGenerateEditRunnerOptions(t *testing.T) {
 }
 
 func TestIsRunnerUpToDate(t *testing.T) {
+	t.Parallel()
 	cases := map[string]struct {
 		spec     *commonv1alpha1.CommonRunnerParameters
 		observed *gitlab.RunnerDetails
@@ -306,6 +315,7 @@ func TestIsRunnerUpToDate(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := IsRunnerUpToDate(tc.spec, tc.observed)
 			if got != tc.want {
 				t.Errorf("IsRunnerUpToDate() = %v, want %v", got, tc.want)

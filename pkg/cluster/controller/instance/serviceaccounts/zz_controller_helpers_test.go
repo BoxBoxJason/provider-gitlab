@@ -34,6 +34,7 @@ import (
 )
 
 func TestGetAccessLevelValue(t *testing.T) {
+	t.Parallel()
 	tests := map[string]struct {
 		accessLevel string
 		want        int
@@ -52,6 +53,7 @@ func TestGetAccessLevelValue(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := getAccessLevelValue(tc.accessLevel)
 			if got != tc.want {
 				t.Fatalf("getAccessLevelValue(%q) = %d, want %d", tc.accessLevel, got, tc.want)
@@ -61,6 +63,7 @@ func TestGetAccessLevelValue(t *testing.T) {
 }
 
 func TestFetchTopLevelGroupsPage(t *testing.T) {
+	t.Parallel()
 	client := &groupsfake.MockClient{
 		MockListGroups: func(opt *gitlab.ListGroupsOptions, options ...gitlab.RequestOptionFunc) ([]*gitlab.Group, *gitlab.Response, error) {
 			if opt.TopLevelOnly == nil || !*opt.TopLevelOnly {
@@ -94,6 +97,7 @@ func TestFetchTopLevelGroupsPage(t *testing.T) {
 }
 
 func TestGetGroupPermissionStatus(t *testing.T) {
+	t.Parallel()
 	tests := map[string]struct {
 		memberClient *groupsfake.MockClient
 		wantMissing  bool
@@ -133,6 +137,7 @@ func TestGetGroupPermissionStatus(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			e := &external{groupMemberClient: tc.memberClient}
 			missing, wrong, err := e.getGroupPermissionStatus(42, 99, accessLevelDeveloperValue)
 			if tc.wantErr == nil {
@@ -153,6 +158,7 @@ func TestGetGroupPermissionStatus(t *testing.T) {
 }
 
 func TestFetchTopLevelGroupsMissingPermissions(t *testing.T) {
+	t.Parallel()
 	var (
 		pagesMu sync.Mutex
 		pages   []int64
@@ -210,6 +216,7 @@ func TestFetchTopLevelGroupsMissingPermissions(t *testing.T) {
 }
 
 func TestAddServiceAccountToGroups(t *testing.T) {
+	t.Parallel()
 	var (
 		callsMu sync.Mutex
 		calls   = map[int64]*gitlab.AddGroupMemberOptions{}
@@ -255,6 +262,7 @@ func TestAddServiceAccountToGroups(t *testing.T) {
 }
 
 func TestUpdateServiceAccountGroupPermissions(t *testing.T) {
+	t.Parallel()
 	var (
 		callsMu sync.Mutex
 		calls   = map[int64]*gitlab.EditGroupMemberOptions{}

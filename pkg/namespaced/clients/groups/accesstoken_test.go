@@ -28,6 +28,7 @@ import (
 )
 
 func TestGenerateCreateGroupAccessTokenOptions(t *testing.T) {
+	t.Parallel()
 	name := "Name"
 	var expiresAt time.Time
 	renewalPeriodDays30 := 30
@@ -99,6 +100,7 @@ func TestGenerateCreateGroupAccessTokenOptions(t *testing.T) {
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateCreateGroupAccessTokenOptions(tc.args.name, tc.args.parameters)
 
 			if tc.want.Name != nil && got.Name != nil && *tc.want.Name != *got.Name {
@@ -145,6 +147,7 @@ func TestGenerateCreateGroupAccessTokenOptions(t *testing.T) {
 }
 
 func TestGenerateGroupAccessTokenObservation(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	createdAt := time.Now().UTC().Add(-time.Hour).Truncate(time.Second)
 
@@ -181,6 +184,7 @@ func TestGenerateGroupAccessTokenObservation(t *testing.T) {
 }
 
 func TestGenerateRotateGroupAccessTokenOptions(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	renewalPeriodDays30 := 30
 
@@ -206,6 +210,7 @@ func TestGenerateRotateGroupAccessTokenOptions(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := GenerateRotateGroupAccessTokenOptions(tc.params)
 
 			switch {
@@ -236,6 +241,7 @@ func TestGenerateRotateGroupAccessTokenOptions(t *testing.T) {
 }
 
 func TestShouldRotateGroupAccessToken(t *testing.T) {
+	t.Parallel()
 	expiresAt := time.Now().UTC().Truncate(time.Second)
 	otherExpiresAt := expiresAt.Add(24 * time.Hour)
 
@@ -342,6 +348,7 @@ func TestShouldRotateGroupAccessToken(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			got := ShouldRotateAccessToken(tc.params, tc.at)
 			if got != tc.want {
 				t.Errorf("ShouldRotateAccessToken() = %v, want %v", got, tc.want)

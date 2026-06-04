@@ -39,6 +39,7 @@ func (m *mockManagedResource) GetNamespace() string {
 }
 
 func TestGetTokenValueFromSecret(t *testing.T) {
+	t.Parallel()
 	testToken := "test-token-value"
 	testNamespace := "test-namespace"
 	testSecretName := "test-secret"
@@ -152,6 +153,7 @@ func TestGetTokenValueFromSecret(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			mg := &mockManagedResource{namespace: testNamespace}
 
 			got, err := GetTokenValueFromSecret(context.Background(), tc.args.kube, mg, tc.args.selector)
@@ -168,6 +170,7 @@ func TestGetTokenValueFromSecret(t *testing.T) {
 }
 
 func TestGetTokenValueFromLocalSecret(t *testing.T) {
+	t.Parallel()
 	testToken := "test-local-token-value"
 	testNamespace := "test-namespace"
 	testSecretName := "test-secret"
@@ -255,6 +258,7 @@ func TestGetTokenValueFromLocalSecret(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			mg := &mockManagedResource{namespace: testNamespace}
 
 			got, err := GetTokenValueFromLocalSecret(context.Background(), tc.args.kube, mg, tc.args.selector)
@@ -271,6 +275,7 @@ func TestGetTokenValueFromLocalSecret(t *testing.T) {
 }
 
 func TestResolvePublicJobsSetting(t *testing.T) {
+	t.Parallel()
 	trueVal := true
 	falseVal := false
 
@@ -371,6 +376,7 @@ func TestResolvePublicJobsSetting(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 			gotValue, gotDeprecated := ResolvePublicJobsSetting(tc.args.publicBuilds, tc.args.publicJobs)
 
 			if diff := cmp.Diff(tc.want.value, gotValue); diff != "" {

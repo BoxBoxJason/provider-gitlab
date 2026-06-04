@@ -180,6 +180,7 @@ func (m *mockProtectedEnvironmentClient) UnprotectEnvironment(pid interface{}, n
 }
 
 func TestConnect(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		result managed.ExternalClient
@@ -216,6 +217,7 @@ func TestConnect(t *testing.T) {
 	for name, tc := range cases {
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 
 			c := &connector{
 
@@ -249,6 +251,7 @@ func TestConnect(t *testing.T) {
 }
 
 func TestObserve(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		cr resource.Managed
@@ -495,6 +498,7 @@ func TestObserve(t *testing.T) {
 	for name, tc := range cases {
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 
 			e := &external{client: tc.env}
 
@@ -525,6 +529,7 @@ func TestObserve(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		cr resource.Managed
@@ -655,6 +660,7 @@ func TestCreate(t *testing.T) {
 	for name, tc := range cases {
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 
 			e := &external{client: tc.env}
 
@@ -685,6 +691,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		err error
@@ -872,6 +879,7 @@ func TestUpdate(t *testing.T) {
 	for name, tc := range cases {
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 
 			e := &external{client: tc.env}
 
@@ -890,6 +898,7 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		cr resource.Managed
@@ -1022,6 +1031,7 @@ func TestDelete(t *testing.T) {
 	for name, tc := range cases {
 
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
 
 			e := &external{client: tc.env}
 
@@ -1052,6 +1062,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestIsResponseNotFound_Helper(t *testing.T) {
+	t.Parallel()
 
 	// ensure we keep the same not-found behavior as the rest of controllers
 
