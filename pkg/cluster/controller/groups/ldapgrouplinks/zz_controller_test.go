@@ -214,7 +214,7 @@ func TestObserve(t *testing.T) {
 			args: args{
 				ldapGroupLink: &fake.MockClient{
 					MockListGroupLDAPLinks: func(gid interface{}, options ...gitlab.RequestOptionFunc) ([]*gitlab.LDAPGroupLink, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errors.New("404 Not Found")
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errors.New("404 Not Found")
 					},
 				},
 				cr: ldapGroupLink(

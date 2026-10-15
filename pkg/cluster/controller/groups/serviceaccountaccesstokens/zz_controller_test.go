@@ -177,7 +177,7 @@ func TestObserve(t *testing.T) {
 			args: args{
 				client: &fake.MockClient{
 					MockListServiceAccountPersonalAccessTokens: func(_ any, _ int64, _ *gitlab.ListServiceAccountPersonalAccessTokensOptions, _ ...gitlab.RequestOptionFunc) ([]*gitlab.PersonalAccessToken, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 				},
 				cr: saToken(withExternalName(sAccessTokenID), withSpec(v1alpha1.ServiceAccountAccessTokenParameters{GroupID: &groupID, ServiceAccountID: &saID})),
@@ -185,6 +185,23 @@ func TestObserve(t *testing.T) {
 			want: want{
 				cr:     saToken(withExternalName(sAccessTokenID), withSpec(v1alpha1.ServiceAccountAccessTokenParameters{GroupID: &groupID, ServiceAccountID: &saID}), withConditions(ownerCond())),
 				result: managed.ExternalObservation{ResourceExists: false},
+			},
+		},
+		"ListProxy404": {
+			// A 404 page served by a reverse proxy while GitLab is unreachable
+			// must not be mistaken for a revoked token, or Create would mint a
+			// duplicate.
+			args: args{
+				client: &fake.MockClient{
+					MockListServiceAccountPersonalAccessTokens: func(_ any, _ int64, _ *gitlab.ListServiceAccountPersonalAccessTokensOptions, _ ...gitlab.RequestOptionFunc) ([]*gitlab.PersonalAccessToken, *gitlab.Response, error) {
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"text/html"}}}}, errBoom
+					},
+				},
+				cr: saToken(withExternalName(sAccessTokenID), withSpec(v1alpha1.ServiceAccountAccessTokenParameters{GroupID: &groupID, ServiceAccountID: &saID})),
+			},
+			want: want{
+				cr:  saToken(withExternalName(sAccessTokenID), withSpec(v1alpha1.ServiceAccountAccessTokenParameters{GroupID: &groupID, ServiceAccountID: &saID}), withConditions(ownerCond())),
+				err: errors.Wrap(errBoom, errAccessTokenNotFound),
 			},
 		},
 		"TokenNotInList": {
@@ -463,7 +480,7 @@ func TestCreate(t *testing.T) {
 			args: args{
 				client: &fake.MockClient{
 					MockRotateServiceAccountPersonalAccessToken: func(_ any, _, _ int64, _ *gitlab.RotateServiceAccountPersonalAccessTokenOptions, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 					MockCreateServiceAccountPersonalAccessToken: func(_ any, _ int64, _ *gitlab.CreateServiceAccountPersonalAccessTokenOptions, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {
 						return &tokenObj, &gitlab.Response{}, nil

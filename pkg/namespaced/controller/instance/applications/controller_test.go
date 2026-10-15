@@ -228,7 +228,7 @@ func TestObserve(t *testing.T) {
 			args: args{
 				client: &MockApplicationClient{
 					MockListApplications: func(opt *gitlab.ListApplicationsOptions, options ...gitlab.RequestOptionFunc) ([]*gitlab.Application, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 				},
 				cr: application(withExternalName(testExternalNameID), withSpec(testDesiredSpec)),
@@ -801,7 +801,7 @@ func TestDelete(t *testing.T) {
 			args: args{
 				client: &MockApplicationClient{
 					MockDeleteApplication: func(application int64, options ...gitlab.RequestOptionFunc) (*gitlab.Response, error) {
-						return &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errBoom
+						return &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 				},
 				cr: application(withSpec(testDesiredSpec), withExternalName(testExternalNameID)),

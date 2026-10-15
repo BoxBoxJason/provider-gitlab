@@ -415,7 +415,7 @@ func (e *external) validateServiceAccount(ctx context.Context, serviceAccountID 
 
 // ownsServiceAccountToken reports whether the personal access token with the
 // given id exists and belongs to the expected service account. A token that no
-// longer exists (404) returns (false, nil) so the caller can create a fresh
+// longer exists (a GitLab API 404) returns (false, nil) so the caller can create a fresh
 // one; any other API error is returned.
 func (e *external) ownsServiceAccountToken(ctx context.Context, tokenID, serviceAccountID int64) (bool, error) {
 	at, res, err := e.client.GetSinglePersonalAccessTokenByID(tokenID, gitlab.WithContext(ctx))
@@ -432,7 +432,7 @@ func (e *external) ownsServiceAccountToken(ctx context.Context, tokenID, service
 // fall through to creating a fresh token. This is only safe when the existing
 // token is genuinely gone:
 //
-//   - 404: the token id is unknown (deleted out-of-band, or wrong service account)
+//   - 404 from the GitLab API: the token id is unknown (deleted out-of-band, or wrong service account)
 //   - 400 "Token already revoked": the token exists but is revoked
 //
 // Any other error (transient, 403, 5xx, transport) must not trigger a create, to

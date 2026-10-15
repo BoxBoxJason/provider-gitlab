@@ -256,9 +256,18 @@ func TestObserve(t *testing.T) {
 		},
 		"ErrGet404": {
 			args: args{userClient: &MockUserClient{MockGetUser: func(user int64, opt *gitlab.GetUserOptions, options ...gitlab.RequestOptionFunc) (*gitlab.User, *gitlab.Response, error) {
-				return nil, &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errors.New("not found")
+				return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errors.New("not found")
 			}}, cr: serviceAccount(withExternalName("123"), withSpec(desired))},
 			want: want{cr: serviceAccount(withExternalName("123"), withSpec(desired)), result: managed.ExternalObservation{}},
+		},
+		"ErrGetProxy404": {
+			// A 404 page served by a reverse proxy while GitLab is unreachable
+			// must not be mistaken for a deleted service account, or Create
+			// would mint a duplicate.
+			args: args{userClient: &MockUserClient{MockGetUser: func(user int64, opt *gitlab.GetUserOptions, options ...gitlab.RequestOptionFunc) (*gitlab.User, *gitlab.Response, error) {
+				return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"text/html"}}}}, errBoom
+			}}, cr: serviceAccount(withExternalName("123"), withSpec(desired))},
+			want: want{cr: serviceAccount(withExternalName("123"), withSpec(desired)), err: errors.Wrap(errBoom, errGetFailed)},
 		},
 		"DeletingShouldAllowCRDeletion": func() struct {
 			args args
@@ -271,7 +280,7 @@ func TestObserve(t *testing.T) {
 				want want
 			}{
 				args: args{userClient: &MockUserClient{MockGetUser: func(user int64, opt *gitlab.GetUserOptions, options ...gitlab.RequestOptionFunc) (*gitlab.User, *gitlab.Response, error) {
-					return nil, &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errors.New("not found")
+					return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errors.New("not found")
 				}}, cr: sa},
 				want: want{cr: sa, result: managed.ExternalObservation{}},
 			}

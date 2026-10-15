@@ -21,6 +21,7 @@ package clients
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"mime"
 	"net/http"
 	"time"
 
@@ -264,12 +265,21 @@ func IsTimePtrEqualToTimePtr(tp1, tp2 *time.Time) bool {
 	return tp1 != nil || tp2 != nil
 }
 
-// IsResponseNotFound returns true of Gitlab Response indicates CR was not found
+// IsResponseNotFound reports whether the response is a 404 produced by the
+// GitLab API itself. GitLab API errors are always JSON (the API root forces
+// the JSON format, including on its catch-all 404 route), so a 404 carrying
+// any other content type (an HTML or plain-text page) comes from something in
+// front of GitLab, such as a reverse proxy or ingress controller that cannot
+// reach the instance while it restarts. Such a 404 says nothing about whether
+// the resource exists: treating it as "not found" makes Observe report the
+// resource as gone and Create mint a duplicate, leaking the original whenever
+// GitLab generates its identity (service accounts, tokens, hooks, ...).
 func IsResponseNotFound(res *gitlab.Response) bool {
-	if res != nil && res.StatusCode == 404 {
-		return true
+	if res == nil || res.Response == nil || res.StatusCode != http.StatusNotFound {
+		return false
 	}
-	return false
+	mediaType, _, err := mime.ParseMediaType(res.Header.Get("Content-Type"))
+	return err == nil && mediaType == "application/json"
 }
 
 // IsResponseUnauthorized reports whether the GitLab response indicates the

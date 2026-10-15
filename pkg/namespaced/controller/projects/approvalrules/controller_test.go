@@ -183,7 +183,7 @@ func TestObserve(t *testing.T) {
 			args: args{
 				projectApprovalRule: &fake.MockClient{
 					MockGetProjectApprovalRule: func(pid any, ruleID int64, options ...gitlab.RequestOptionFunc) (*gitlab.ProjectApprovalRule, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: 404}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 				},
 				cr: projectApprovalRule(

@@ -214,7 +214,7 @@ func TestObserve(t *testing.T) {
 			args: args{
 				client: &mockClient{
 					MockGetSinglePersonalAccessTokenByID: func(_ int64, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 				},
 				cr: saToken(withExternalName(sAccessTokenID), withSpec(ownerSpec())),
@@ -222,6 +222,23 @@ func TestObserve(t *testing.T) {
 			want: want{
 				cr:     saToken(withExternalName(sAccessTokenID), withSpec(ownerSpec()), withConditions(ownerCond())),
 				result: managed.ExternalObservation{ResourceExists: false},
+			},
+		},
+		"GetProxy404": {
+			// A 404 page served by a reverse proxy while GitLab is unreachable
+			// must not be mistaken for a revoked token, or Create would mint a
+			// duplicate.
+			args: args{
+				client: &mockClient{
+					MockGetSinglePersonalAccessTokenByID: func(_ int64, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"text/html"}}}}, errBoom
+					},
+				},
+				cr: saToken(withExternalName(sAccessTokenID), withSpec(ownerSpec())),
+			},
+			want: want{
+				cr:  saToken(withExternalName(sAccessTokenID), withSpec(ownerSpec()), withConditions(ownerCond())),
+				err: errors.Wrap(errBoom, errAccessTokenNotFound),
 			},
 		},
 		"TokenUserMismatch": {
@@ -571,7 +588,7 @@ func TestCreate(t *testing.T) {
 				client: &mockClient{
 					MockGetSinglePersonalAccessTokenByID: mockGetOwnedToken(),
 					MockRotatePersonalAccessTokenByID: func(_ int64, _ *gitlab.RotatePersonalAccessTokenOptions, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {
-						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound}}, errBoom
+						return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
 					},
 					MockGetUser: mockGetUserServiceAccount(),
 					MockCreatePersonalAccessToken: func(_ int64, _ *gitlab.CreatePersonalAccessTokenOptions, _ ...gitlab.RequestOptionFunc) (*gitlab.PersonalAccessToken, *gitlab.Response, error) {

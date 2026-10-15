@@ -390,7 +390,7 @@ func (e *external) createOwner(ctx context.Context, cr *v1alpha1.ServiceAccountA
 // fall through to creating a fresh token. This is only safe when the existing
 // token is genuinely gone:
 //
-//   - 404: the token id is unknown (deleted out-of-band, or wrong service account)
+//   - 404 from the GitLab API: the token id is unknown (deleted out-of-band, or wrong service account)
 //   - 400 "Token already revoked": the token exists but is revoked
 //
 // Any other error (transient, 403, 5xx, transport) must not trigger a create, to

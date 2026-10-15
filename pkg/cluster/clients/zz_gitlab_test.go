@@ -18,7 +18,12 @@ limitations under the License.
 
 package clients
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+
+	gitlab "gitlab.com/gitlab-org/api/client-go/v3"
+)
 
 func TestAreStringSlicesEqual(t *testing.T) {
 	cases := map[string]struct {
@@ -57,6 +62,57 @@ func TestAreStringSlicesEqual(t *testing.T) {
 			got := AreStringSlicesEqual(tc.a, tc.b)
 			if got != tc.want {
 				t.Errorf("AreStringSlicesEqual(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestIsResponseNotFound(t *testing.T) {
+	response := func(status int, contentType string) *gitlab.Response {
+		header := http.Header{}
+		if contentType != "" {
+			header.Set("Content-Type", contentType)
+		}
+		return &gitlab.Response{Response: &http.Response{StatusCode: status, Header: header}}
+	}
+
+	cases := map[string]struct {
+		res  *gitlab.Response
+		want bool
+	}{
+		"NilResponse": {
+			res: nil, want: false,
+		},
+		"NilHTTPResponse": {
+			res: &gitlab.Response{}, want: false,
+		},
+		"GitLabNotFound": {
+			res: response(http.StatusNotFound, "application/json"), want: true,
+		},
+		"GitLabNotFoundWithCharset": {
+			res: response(http.StatusNotFound, "application/json; charset=utf-8"), want: true,
+		},
+		"ProxyHTMLNotFound": {
+			res: response(http.StatusNotFound, "text/html"), want: false,
+		},
+		"ProxyPlainTextNotFound": {
+			res: response(http.StatusNotFound, "text/plain; charset=utf-8"), want: false,
+		},
+		"NotFoundWithoutContentType": {
+			res: response(http.StatusNotFound, ""), want: false,
+		},
+		"GitLabServerError": {
+			res: response(http.StatusInternalServerError, "application/json"), want: false,
+		},
+		"BadGateway": {
+			res: response(http.StatusBadGateway, "text/html"), want: false,
+		},
+	}
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+			if got := IsResponseNotFound(tc.res); got != tc.want {
+				t.Errorf("IsResponseNotFound() = %v, want %v", got, tc.want)
 			}
 		})
 	}

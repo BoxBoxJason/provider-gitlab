@@ -127,6 +127,23 @@ func TestObserve(t *testing.T) {
 			cr:   sa(withExternalName(sSAID), withProjectID(projectID)),
 			want: want{err: errors.Wrap(errBoom, errGetFailed)},
 		},
+		"ErrList404": {
+			client: &mockClient{MockList: func(_ any, _ *gitlab.ListProjectServiceAccountsOptions, _ ...gitlab.RequestOptionFunc) ([]*gitlab.ProjectServiceAccount, *gitlab.Response, error) {
+				return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"application/json"}}}}, errBoom
+			}},
+			cr:   sa(withExternalName(sSAID), withProjectID(projectID)),
+			want: want{result: managed.ExternalObservation{ResourceExists: false}},
+		},
+		"ErrListProxy404": {
+			// A 404 page served by a reverse proxy while GitLab is unreachable
+			// must not be mistaken for a deleted service account, or Create
+			// would mint a duplicate.
+			client: &mockClient{MockList: func(_ any, _ *gitlab.ListProjectServiceAccountsOptions, _ ...gitlab.RequestOptionFunc) ([]*gitlab.ProjectServiceAccount, *gitlab.Response, error) {
+				return nil, &gitlab.Response{Response: &http.Response{StatusCode: http.StatusNotFound, Header: http.Header{"Content-Type": {"text/html"}}}}, errBoom
+			}},
+			cr:   sa(withExternalName(sSAID), withProjectID(projectID)),
+			want: want{err: errors.Wrap(errBoom, errGetFailed)},
+		},
 		"NotInList": {
 			client: &mockClient{MockList: listReturning(&gitlab.ProjectServiceAccount{ID: 999})},
 			cr:     sa(withExternalName(sSAID), withProjectID(projectID)),
